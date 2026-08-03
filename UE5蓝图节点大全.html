@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UE5 蓝图节点大全 · 中英对照</title>
+<style>
+:root {
+  --paper: #f6f1e6;
+  --paper-2: #efe7d5;
+  --card: #fdfaf3;
+  --ink: #2e2a22;
+  --ink-soft: #5d564a;
+  --teal: #14555b;
+  --teal-2: #1d7178;
+  --amber: #b07d2b;
+  --amber-soft: rgba(176,125,43,.10);
+  --line: #ddd2bc;
+  --shadow: 0 1px 3px rgba(46,42,34,.07), 0 10px 28px rgba(46,42,34,.06);
+  --serif: "Noto Serif SC","Source Han Serif SC","Songti SC","STSong",SimSun,serif;
+  --sans: "Noto Sans SC","Source Han Sans SC","Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+  --mono: "JetBrains Mono","Cascadia Mono",Consolas,"Courier New",monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--paper);
+  background-image:
+    radial-gradient(rgba(20,85,91,.045) 1px, transparent 1px),
+    linear-gradient(180deg, #faf6ec 0%, var(--paper) 420px);
+  background-size: 26px 26px, 100% 100%;
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.75;
+  font-size: 16px;
+}
+a { color: var(--teal-2); text-decoration: none; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #0e3f44 0%, #14555b 55%, #1d7178 100%);
+  color: #f3eddc;
+  padding: 64px 28px 56px;
+  margin-bottom: 40px;
+}
+.hero .inner { max-width: 1160px; margin: 0 auto; }
+.hero .brand {
+  font-family: var(--serif); font-weight: 700;
+  letter-spacing: .14em; text-indent: .14em;
+  color: rgba(243,237,220,.34);
+  font-size: 13px; text-transform: uppercase;
+  margin: 0 0 18px;
+}
+.hero h1 {
+  margin: 0 0 10px;
+  font-family: var(--serif); font-weight: 800;
+  font-size: clamp(30px, 5vw, 52px);
+  letter-spacing: .05em; line-height: 1.25;
+}
+.hero .sub {
+  margin: 0 0 22px; font-size: clamp(15px, 2vw, 18px);
+  color: rgba(243,237,220,.88);
+}
+.hero .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.hero .chip {
+  border: 1px solid rgba(243,237,220,.35);
+  border-radius: 999px; padding: 4px 14px;
+  font-size: 13px; color: #f3eddc; background: rgba(243,237,220,.07);
+}
+.hero .rule { width: 84px; height: 4px; background: var(--amber); border-radius: 2px; margin-top: 30px; }
+.hero .cover-line {
+  position: absolute; right: -20px; bottom: -34px;
+  font-family: var(--serif); font-weight: 800; white-space: nowrap;
+  font-size: clamp(64px, 14vw, 190px); letter-spacing: .06em;
+  color: rgba(243,237,220,.05); pointer-events: none;
+}
+
+/* ---------- 布局 ---------- */
+.page {
+  max-width: 1160px; margin: 0 auto; padding: 0 28px 90px;
+  display: grid; grid-template-columns: 300px minmax(0,1fr); gap: 36px;
+  align-items: start;
+}
+main { min-width: 0; }
+
+/* ---------- 侧边栏 ---------- */
+.sidebar {
+  position: sticky; top: 20px; max-height: calc(100vh - 40px);
+  overflow-y: auto; padding-right: 6px;
+}
+.toc-card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 12px; box-shadow: var(--shadow);
+  padding: 18px 16px;
+}
+.toc-card .label {
+  font-size: 12px; letter-spacing: .28em; color: var(--ink-soft);
+  text-transform: uppercase; margin: 0 0 6px; padding-left: 6px;
+}
+#q {
+  width: 100%; margin: 6px 0 10px; padding: 9px 12px;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: #fffdf6; color: var(--ink); font-family: var(--sans);
+  font-size: 14px; outline: none;
+}
+#q:focus { border-color: var(--teal-2); box-shadow: 0 0 0 3px rgba(29,113,120,.15); }
+#qcount { font-size: 12px; color: var(--ink-soft); padding-left: 6px; min-height: 18px; margin-bottom: 8px; }
+.toc-card nav ul { list-style: none; margin: 0; padding: 0; }
+.toc-card nav ul ul { margin: 2px 0 6px; padding-left: 14px; border-left: 1px solid var(--line); }
+.toc-card nav li { margin: 2px 0; }
+.toc-card nav a {
+  display: block; padding: 3px 8px; border-radius: 6px;
+  color: var(--ink-soft); font-size: 13.5px; line-height: 1.5;
+  border-left: 2px solid transparent;
+}
+.toc-card nav a:hover { background: var(--amber-soft); color: var(--ink); }
+.toc-card nav a.active { background: rgba(20,85,91,.10); color: var(--teal); border-left-color: var(--amber); font-weight: 600; }
+.toc-card nav .tl3 a { font-size: 13px; }
+.toc-card nav .tl4 a { font-size: 12.5px; }
+
+/* ---------- 章节卡片 ---------- */
+main > section,
+main > h2, main > h3, main > h4,
+main > p, main > ul, main > .table-wrap, main > .lead-note {
+  scroll-margin-top: 24px;
+}
+main .hd {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 12px; box-shadow: var(--shadow);
+  padding: 20px 26px; margin: 34px 0 18px;
+  font-family: var(--serif);
+}
+main .hd.lv2 {
+  border-left: 6px solid var(--amber);
+  font-size: 27px; font-weight: 800; letter-spacing: .04em;
+}
+main .hd.lv3 {
+  border-left: 5px solid var(--teal);
+  font-size: 21px; font-weight: 700; margin-top: 26px;
+}
+main .hd.lv4 {
+  border-left: 4px solid var(--teal-2);
+  font-size: 17.5px; font-weight: 600; margin-top: 20px; padding: 14px 22px;
+}
+main p { margin: 12px 0; color: #3c362c; }
+main p code.en, td code.en, li code.en {
+  font-family: var(--mono); font-size: .88em;
+  background: rgba(20,85,91,.08); color: #0f4a50;
+  padding: 1px 5px; border-radius: 4px;
+}
+
+/* ---------- 表格 ---------- */
+.table-wrap {
+  margin: 16px 0; overflow-x: auto;
+  border: 1px solid var(--line); border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+table { width: 100%; border-collapse: collapse; background: var(--card); font-size: 14.5px; }
+thead th {
+  background: var(--teal); color: #f4efe3; text-align: left;
+  padding: 11px 14px; font-weight: 600; letter-spacing: .03em;
+  white-space: nowrap; font-family: var(--serif);
+}
+tbody td {
+  padding: 10px 14px; border-top: 1px solid var(--line);
+  vertical-align: top; color: #3c362c;
+}
+tbody tr:nth-child(even) { background: rgba(20,85,91,.045); }
+tbody tr:hover { background: rgba(176,125,43,.10); }
+tbody td:first-child { font-weight: 600; color: var(--teal); min-width: 120px; }
+
+/* ---------- 要点列表 ---------- */
+ul.bullets {
+  margin: 12px 0; padding-left: 4px; list-style: none;
+}
+ul.bullets li {
+  position: relative; padding-left: 22px; margin: 8px 0; color: #3c362c;
+}
+ul.bullets li::before {
+  content: "◆"; position: absolute; left: 2px; top: 0;
+  color: var(--amber); font-size: 11px;
+}
+
+/* ---------- 说明块 ---------- */
+.lead-note {
+  background: var(--amber-soft);
+  border-left: 4px solid var(--amber);
+  border-radius: 0 10px 10px 0;
+  padding: 16px 20px; margin: 18px 0;
+  font-size: 15px; color: #4a4234;
+}
+.lead-note .lead-tag {
+  display: inline-block; font-weight: 700; color: var(--amber);
+  margin-right: 8px; letter-spacing: .1em;
+}
+
+/* ---------- 页脚 / 回顶 ---------- */
+footer {
+  text-align: center; color: var(--ink-soft);
+  font-size: 13px; padding: 34px 0 60px; letter-spacing: .06em;
+}
+#backtop {
+  position: fixed; right: 26px; bottom: 26px; z-index: 50;
+  width: 46px; height: 46px; border-radius: 50%; border: none; cursor: pointer;
+  background: var(--teal); color: #f4efe3; font-size: 18px;
+  box-shadow: var(--shadow); opacity: 0; pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+}
+#backtop.show { opacity: 1; pointer-events: auto; }
+#backtop:hover { transform: translateY(-3px); background: var(--teal-2); }
+
+@media (max-width: 980px) {
+  .page { grid-template-columns: 1fr; padding: 0 16px 60px; }
+  .sidebar { position: static; max-height: none; }
+  .hero { padding: 44px 18px 40px; }
+}
+@media print {
+  .sidebar, #backtop, .hero .cover-line { display: none; }
+  .page { display: block; padding: 0; }
+  .hero { background: none; color: var(--ink); border-bottom: 2px solid var(--amber); }
+  .hero .brand, .hero .chip { color: var(--ink-soft); border-color: var(--line); }
+  .hd, .table-wrap { box-shadow: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="inner">
+    <p class="brand">U N R E A L E N G I N E 5 B L U E P R I N T N O D E R E F E R E N C E · E N / C N</p>
+    <h1>UE5 蓝图节点大全（中英对照）</h1>
+    <p class="sub">节点作用与典型应用场景全解析（含 5.6 / 5.7 增量）</p>
+    <div class="chips">
+      <span class="chip">共 18 章</span><span class="chip">节点表 58 张</span><span class="chip">适用版本 Unreal Engine 5（基线 5.5，含 5.6 / 5.7 更新）</span><span class="chip">资料依据 Epic 官方文档与官方 Blueprint API 参考</span><span class="chip">整理日期 2026 年 8 月</span><span class="chip">节点名中英对照 英文原名 + 中文注释（其余内容保持中文）</span><span class="chip">基于官方文档核实整理</span>
+    </div>
+    <div class="rule"></div>
+  </div>
+  <div class="cover-line">U N R E A L E N G I N E 5 B L U E P R I N T N O D E R E F E R E N C E · E N / C N</div>
+</header>
+
+<div class="page">
+  <aside class="sidebar">
+    <div class="toc-card">
+      <p class="label">目录</p>
+      <input id="q" type="search" placeholder="搜索节点名 / 英文名…" autocomplete="off">
+      <p id="qcount"></p>
+      <nav id="toc"><ul>
+<li class="tl2"><a href="#s1">一、事件节点</a>
+<ul>
+<li class="tl3"><a href="#s2">1.1 生命周期事件</a></li>
+<li class="tl3"><a href="#s3">1.2 碰撞 / 交互事件</a></li>
+<li class="tl3"><a href="#s4">1.3 伤害事件</a></li>
+<li class="tl3"><a href="#s5">1.4 Event Dispatcher（事件分发器）</a></li>
+<li class="tl3"><a href="#s6">1.5 其他事件</a></li>
+</ul>
+</li>
+<li class="tl2"><a href="#s7">二、流程控制节点</a>
+</li>
+<li class="tl2"><a href="#s8">三、数学节点</a>
+<ul>
+<li class="tl3"><a href="#s9">3.1 算术运算</a></li>
+<li class="tl3"><a href="#s10">3.2 数值处理</a></li>
+<li class="tl3"><a href="#s11">3.3 插值（平滑过渡）</a></li>
+<li class="tl3"><a href="#s12">3.4 向量运算</a></li>
+<li class="tl3"><a href="#s13">3.5 随机数</a></li>
+<li class="tl3"><a href="#s14">3.6 三角函数</a></li>
+<li class="tl3"><a href="#s15">3.7 布尔逻辑</a></li>
+</ul>
+</li>
+<li class="tl2"><a href="#s16">四、变量与数据类型</a>
+</li>
+<li class="tl2"><a href="#s17">五、数组 / 映射 / 集合</a>
+<ul>
+<li class="tl3"><a href="#s18">5.1 数组（Array）</a></li>
+<li class="tl3"><a href="#s19">5.2 映射 / 字典（Map）</a></li>
+<li class="tl3"><a href="#s20">5.3 集合（Set，无序且元素唯一）</a></li>
+</ul>
+</li>
+<li class="tl2"><a href="#s21">六、游戏框架节点</a>
+</li>
+<li class="tl2"><a href="#s22">七、AI 相关节点</a>
+<ul>
+<li class="tl3"><a href="#s23">7.1 AI 移动</a></li>
+<li class="tl3"><a href="#s24">7.2 AI 感知（AIPerception）</a></li>
+<li class="tl3"><a href="#s25">7.3 行为树（Behavior Tree）</a></li>
+<li class="tl3"><a href="#s26">7.4 EQS（环境查询系统）</a></li>
+</ul>
+</li>
+<li class="tl2"><a href="#s27">八、动画相关节点</a>
+</li>
+<li class="tl2"><a href="#s28">九、物理与碰撞节点</a>
+<ul>
+<li class="tl3"><a href="#s29">9.1 力与速度</a></li>
+<li class="tl3"><a href="#s30">9.2 物理材质</a></li>
+<li class="tl3"><a href="#s31">9.3 射线 / 形状检测（Trace）</a></li>
+</ul>
+</li>
+<li class="tl2"><a href="#s32">十、UI 节点（UMG）</a>
+</li>
+<li class="tl2"><a href="#s33">十一、渲染 / 视觉节点</a>
+</li>
+<li class="tl2"><a href="#s34">十二、音频节点</a>
+</li>
+<li class="tl2"><a href="#s35">十三、输入节点</a>
+<ul>
+<li class="tl3"><a href="#s36">13.1 Enhanced Input 体系</a></li>
+<li class="tl3"><a href="#s37">13.2 事件输出状态</a></li>
+</ul>
+</li>
+<li class="tl2"><a href="#s38">十四、网络 / 多人节点</a>
+</li>
+<li class="tl2"><a href="#s39">十五、UE5 新增 / 改名 / 弃用节点</a>
+</li>
+<li class="tl2"><a href="#s40">十六、UE 5.6 / 5.7 增量内容（面向 5.7 用户）</a>
+<ul>
+<li class="tl3"><a href="#s41">16.1 数学 / 流程节点新增（5.7）</a></li>
+<li class="tl3"><a href="#s42">16.2 GAS（Gameplay Ability System）新函数（5.7）</a></li>
+<li class="tl3"><a href="#s43">16.3 State Tree（5.6 / 5.7，AI 状态机新方向）</a></li>
+<li class="tl3"><a href="#s44">16.4 Motion Matching 与 Choosers（5.7，Experimental）</a></li>
+<li class="tl3"><a href="#s45">16.5 Mover 插件（5.7，蓝图可用）</a></li>
+<li class="tl3"><a href="#s46">16.6 Enhanced Input 增量（5.6 / 5.7）</a></li>
+<li class="tl3"><a href="#s47">16.7 游戏框架 / 网络增量</a></li>
+<li class="tl3"><a href="#s48">16.8 动画 / 编辑器其他增量（5.6 / 5.7）</a></li>
+</ul>
+</li>
+<li class="tl2"><a href="#s49">十七、蓝图节点补充与组合实战（面向 5.7）</a>
+<ul>
+<li class="tl3"><a href="#s50">17.1 先搞懂：节点之间是怎么连的（官方机制）</a></li>
+<li class="tl3"><a href="#s51">17.2 UE 5.7 蓝图增量补充（官方核实，正文未收录）</a></li>
+<li class="tl3"><a href="#s52">17.3 高频节点组合链实战（核心：A 接 B 接 C 的用途）</a></li>
+<li class="tl4"><a href="#s53">17.3.1 初始化与生命周期</a></li>
+<li class="tl4"><a href="#s54">17.3.2 输入 → 移动（Enhanced Input）</a></li>
+<li class="tl4"><a href="#s55">17.3.3 碰撞与命中</a></li>
+<li class="tl4"><a href="#s56">17.3.4 位置 / 朝向 / 距离</a></li>
+<li class="tl4"><a href="#s57">17.3.5 计时与平滑过渡</a></li>
+<li class="tl4"><a href="#s58">17.3.6 流程控制组合</a></li>
+<li class="tl4"><a href="#s59">17.3.7 蓝图通信（官方推荐模式，来源：Blueprint Communication Usage）</a></li>
+<li class="tl4"><a href="#s60">17.3.8 UI（UMG）</a></li>
+<li class="tl4"><a href="#s61">17.3.9 动画</a></li>
+<li class="tl4"><a href="#s62">17.3.10 AI</a></li>
+<li class="tl4"><a href="#s63">17.3.11 网络 / 多人</a></li>
+<li class="tl3"><a href="#s64">17.4 常见「接法误区」（防坑）</a></li>
+<li class="tl3"><a href="#s65">17.5 官方与社区学习资源</a></li>
+</ul>
+</li>
+<li class="tl2"><a href="#s66">附录：使用技巧</a>
+</li>
+<li class="tl2"><a href="#s67">十八、社区检索查漏补缺补充节点（CSDN / 知乎 / B 站 / Epic 官方交叉核对）</a>
+<ul>
+<li class="tl3"><a href="#s68">18.1 定时器体系（官方 GameplayStatics，正文只覆盖了 Delay）</a></li>
+<li class="tl3"><a href="#s69">18.2 输入模式切换（PlayerController 标准函数，UMG 章节缺口）</a></li>
+<li class="tl3"><a href="#s70">18.3 Pawn 控制权切换（Controller / Pawn）</a></li>
+<li class="tl3"><a href="#s71">18.4 材质参数动态控制（Material Instance Dynamic API）</a></li>
+<li class="tl3"><a href="#s72">18.5 UMG 控件动画（Widget Animation，UMG 章节缺口）</a></li>
+<li class="tl3"><a href="#s73">18.6 数组补充节点</a></li>
+<li class="tl3"><a href="#s74">18.7 关卡流送（Level Streaming，正文完全缺失）</a></li>
+<li class="tl3"><a href="#s75">18.8 保存 / 读取游戏（Save Game，正文只在 5.7 增量提了一个异步函数）</a></li>
+<li class="tl3"><a href="#s76">18.9 宏（Macro）与宏库（Macro Library）</a></li>
+<li class="tl3"><a href="#s77">18.10 调试与渲染判断补充</a></li>
+<li class="tl3"><a href="#s78">18.11 存疑节点说明（经官方核对，未收录 / 标注存疑）</a></li>
+<li class="tl3"><a href="#s79">18.12 数据表（Data Table，正文完全缺失）</a></li>
+<li class="tl3"><a href="#s80">18.13 游戏标签（Gameplay Tags，正文完全缺失）</a></li>
+<li class="tl3"><a href="#s81">18.14 样条线（Spline，正文完全缺失）</a></li>
+<li class="tl3"><a href="#s82">18.15 力反馈、作弊管理器、四元数与日期时间（正文缺失的零散分类）</a></li>
+<li class="tl3"><a href="#s83">18.16 第二批补漏小结</a></li>
+</ul>
+</li>
+      </ul></nav>
+    </div>
+  </aside>
+
+  <main>
+    <p>目  录</p>
+
+    <div class="lead-note"><span class="lead-tag">说明</span><code class="en">UE</code> 蓝图节点总数有数千个，本文覆盖全部主要分类及每个分类下的核心/常用节点，足以支撑日常开发与学习。编辑器里右键空白处搜索英文节点名即可找到对应节点。版本时间线：<code class="en">UE</code> 5.5 ≈ 2024-11 ｜ <code class="en">UE</code> 5.6 ≈ 2025-08 ｜ <code class="en">UE</code> 5.7 ≈ 2025-12 ｜ <code class="en">UE</code> 5.8 ≈ 2026-07（官方确认是 <code class="en">UE5</code> 最后一个大版本，<code class="en">UE6</code> 抢先体验目标 2027 年底）。</div>
+
+    <h2 id="s1" class="hd lv2">一、事件节点</h2>
+
+    <p>每个事件节点在 <code class="en">Event Graph</code> 中只能用一次；事件没有执行输入引脚，由引擎或系统在特定时机触发。</p>
+
+    <h3 id="s2" class="hd lv3">1.1 生命周期事件</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>触发时机</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Event BeginPlay</code>（游戏开始）</td><td>游戏开始、<code class="en">Actor</code> 进入世界时触发（游戏开始后才生成的 <code class="en">Actor</code> 会立即触发）</td><td>初始化变量（血量=100、分数=0）、加载存档、播放开场动画</td></tr>
+        <tr><td><code class="en">Event Tick</code>（每帧触发）</td><td>每帧触发一次，输出 <code class="en">Delta Seconds</code>（距上一帧秒数）</td><td>逐帧倒计时、摄像机跟随、随时间变化的逻辑</td></tr>
+        <tr><td><code class="en">Event EndPlay</code>（结束播放）</td><td><code class="en">Actor</code> 离开世界时触发，输出 <code class="en">End Play Reason</code>（结束原因枚举）</td><td>释放资源、保存数据、清理监听</td></tr>
+        <tr><td><code class="en">Event Destroyed</code>（被销毁）</td><td><code class="en">Actor</code> 被销毁时触发。⚠️ 官方已标弃用：功能并入 <code class="en">EndPlay</code></td><td>死亡后的清理</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s3" class="hd lv3">1.2 碰撞 / 交互事件</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>触发时机</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Event Actor Begin Overlap</code>（开始重叠）</td><td>与其他 <code class="en">Actor</code> 开始重叠时（要求双方碰撞响应为 <code class="en">Overlap</code> 且 <code class="en">Generate Overlap Events</code> 开启），输出 <code class="en">Other Actor</code></td><td>触发器区域、拾取道具、进出门</td></tr>
+        <tr><td><code class="en">Event Actor End Overlap</code>（结束重叠）</td><td>停止重叠时</td><td>离开危险区、出圈判定</td></tr>
+        <tr><td><code class="en">Event Hit</code>（碰撞命中）</td><td>与实心物体碰撞时（<code class="en">Simulation Generates Hit Events</code> 开启；<code class="en">Sweep</code> 移动也会触发）。输出 <code class="en">My Comp</code> / <code class="en">Other</code> / <code class="en">Other Comp</code> / <code class="en">Hit Location</code> / <code class="en">Hit Normal</code> / <code class="en">Normal Impulse</code> / <code class="en">Hit</code>（<code class="en">HitResult</code>）</td><td>子弹命中、物体落地、碰撞伤害</td></tr>
+        <tr><td><code class="en">OnComponentBeginOverlap</code> / <code class="en">EndOverlap</code> / <code class="en">Hit</code>（组件重叠/碰撞事件）</td><td>组件级版本，绑定在具体组件上</td><td>只对某组件（如脚部检测）做碰撞响应</td></tr>
+        <tr><td><code class="en">OnActorHit</code>（<code class="en">Actor</code> 碰撞事件）</td><td>本 <code class="en">Actor</code> 撞到（或被撞到）实心物体时</td><td>角色撞墙、车辆碰撞</td></tr>
+        <tr><td><code class="en">Event Actor Begin</code> / <code class="en">End Cursor Over</code>（光标悬停进出）</td><td>鼠标悬停到 / 离开 <code class="en">Actor</code> 上时</td><td>悬停高亮材质</td></tr>
+        <tr><td><code class="en">OnClicked</code>（点击事件）</td><td>组件被鼠标点击时（组件上右键 <code class="en">Add Event</code> → <code class="en">OnClicked</code> 创建）</td><td>点击物体拾取、点击交互</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s4" class="hd lv3">1.3 伤害事件</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>触发时机</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Event Any Damage</code>（任意伤害）</td><td>受到任何类型伤害时</td><td>通用扣血逻辑</td></tr>
+        <tr><td><code class="en">Event Point Damage</code>（点伤害）</td><td>受到点伤害时（弹丸、近战）</td><td>武器伤害</td></tr>
+        <tr><td><code class="en">Event Radial Damage</code>（径向伤害）</td><td>受到径向伤害时（爆炸）</td><td>手雷、爆炸范围伤害</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>伤害事件仅服务器执行（单机时本地即服务器）。</p>
+
+    <h3 id="s5" class="hd lv3">1.4 <code class="en">Event Dispatcher</code>（事件分发器）</h3>
+
+    <ul class="bullets">
+      <li>作用：让一个蓝图类向 <code class="en">Level Blueprint</code> 或其他蓝图「广播」状态变化；可带参数（相当于事件签名）。</li>
+      <li>相关节点：<code class="en">Bind Event</code>（绑定）、<code class="en">Unbind Event</code>（解绑）、<code class="en">Assign</code>（赋值绑定）、<code class="en">Call</code>（调用，激活所有已绑定事件）。</li>
+      <li>关键点：在类蓝图内 <code class="en">Target</code> 自动指向 <code class="en">Self</code>；在 <code class="en">Level Blueprint</code> 中必须连接具体实例引用。</li>
+      <li>场景：道具拾取广播「拾取」事件 → <code class="en">Level Blueprint</code> 监听后更新任务文本；角色死亡广播 → 全局 <code class="en">UI</code> 显示游戏结束。</li>
+    </ul>
+
+    <h3 id="s6" class="hd lv3">1.5 其他事件</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>说明</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Event Level Reset</code>（关卡重置）</td><td>仅在 <code class="en">Level Blueprint</code> 中可用，关卡重载时触发</td></tr>
+        <tr><td><code class="en">Event Receive Draw HUD</code>（绘制 <code class="en">HUD</code>）</td><td>仅 <code class="en">HUD</code> 类蓝图可用，绘制 <code class="en">HUD</code> 内容</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="s7" class="hd lv2">二、流程控制节点</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>关键引脚</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Branch</code>（分支）</td><td>最基础的条件分支，按布尔值把执行送往 <code class="en">True</code> / <code class="en">False</code></td><td><code class="en">Condition</code>（bool）→ <code class="en">True</code> / <code class="en">False</code></td><td><code class="en">IsValid</code> 判断、状态检查后分流</td></tr>
+        <tr><td><code class="en">DoOnce</code>（只执行一次）</td><td>只触发一次，之后不再输出，直到 <code class="en">Reset</code>（官方定义等价于 <code class="en">DoN</code> 且 <code class="en">N</code>=1）</td><td><code class="en">Reset</code>（exec）；<code class="en">Completed</code></td><td>一扇门只开一次</td></tr>
+        <tr><td><code class="en">DoN</code>（执行 <code class="en">N</code> 次）</td><td>触发 <code class="en">N</code> 次后停止，直到 <code class="en">Reset</code></td><td><code class="en">Enter</code> / n（int）/ <code class="en">Reset</code>；<code class="en">Exit</code></td><td>车辆最多启动 20 次</td></tr>
+        <tr><td><code class="en">FlipFlop</code>（交替触发）</td><td>每次调用在 <code class="en">A</code>、<code class="en">B</code> 两输出间交替触发</td><td><code class="en">A</code> / <code class="en">B</code>；<code class="en">Is A</code>（bool）</td><td>开 / 关门动画交替</td></tr>
+        <tr><td><code class="en">Gate</code>（执行闸门）</td><td>开关一扇「执行流闸门」，控制 <code class="en">Enter</code> 能否从 <code class="en">Exit</code> 流出</td><td><code class="en">Enter</code> / <code class="en">Open</code> / <code class="en">Close</code> / <code class="en">Toggle</code> / <code class="en">Start Closed</code>；<code class="en">Exit</code></td><td>触发器 <code class="en">A</code> 开门、触发器 <code class="en">B</code> 关门</td></tr>
+        <tr><td><code class="en">MultiGate</code>（多路分发）</td><td>把单个执行脉冲路由到多个输出之一；可顺序 / 随机 / 循环</td><td><code class="en">Reset</code> / <code class="en">Is Random</code> / <code class="en">Loop</code> / <code class="en">Start Index</code>；<code class="en">Out</code> #</td><td>轮播动作、随机播对话</td></tr>
+        <tr><td><code class="en">Sequence</code>（顺序执行）</td><td>一个脉冲按顺序触发多个输出（无延迟，几乎同时）</td><td><code class="en">Out</code> #（可加）</td><td>一次事件同时播放音效 + 动画 + 加分</td></tr>
+        <tr><td><code class="en">ForLoop</code>（计数循环）</td><td>在 <code class="en">First</code>~<code class="en">Last</code> 索引间迭代，每轮输出 <code class="en">Index</code>。⚠️ 官方警告：循环在帧间迭代，大循环有性能开销</td><td><code class="en">First Index</code> / <code class="en">Last Index</code>；<code class="en">Loop Body</code> / <code class="en">Index</code> / <code class="en">Completed</code></td><td>遍历 0~99 生成物品</td></tr>
+        <tr><td><code class="en">ForLoopWithBreak</code>（可中断循环）</td><td>同 <code class="en">ForLoop</code>，额外有 <code class="en">Break</code> 输入可提前跳出</td><td>&nbsp;</td><td>找到目标就停</td></tr>
+        <tr><td><code class="en">WhileLoop</code>（条件循环）</td><td>条件为真时重复执行循环体。⚠️ 必须保证终止条件会更新，否则死循环卡死游戏</td><td><code class="en">Condition</code>（bool）；<code class="en">Loop Body</code> / <code class="en">Completed</code></td><td>不断吞并直到满足条件</td></tr>
+        <tr><td><code class="en">ForEachLoop</code>（遍历循环）</td><td>遍历数组，每次输出 <code class="en">Array Element</code> 与 <code class="en">Array Index</code>（编辑器 <code class="en">Loops</code> 组）</td><td><code class="en">Loop Body</code> / <code class="en">Completed</code></td><td>遍历所有敌人</td></tr>
+        <tr><td><code class="en">Delay</code>（延迟）</td><td>延迟指定秒数后从 <code class="en">Completed</code> 输出。⚠️ 倒计时期间再次调用会被忽略</td><td><code class="en">Duration</code>（<code class="en">float</code>）；<code class="en">Completed</code></td><td>受击后 0.5 秒无敌</td></tr>
+        <tr><td><code class="en">RetriggerableDelay</code>（可重置延迟）</td><td>同 <code class="en">Delay</code>，但倒计时中再次调用会重置计时</td><td><code class="en">Duration</code>；<code class="en">Completed</code></td><td>连续按键刷新倒计时</td></tr>
+        <tr><td><code class="en">DelayUntilNextTick</code>（延迟到下一帧）</td><td>延迟一个 tick，推到本帧渲染后执行</td><td><code class="en">Completed</code></td><td>本帧逻辑顺序调整</td></tr>
+        <tr><td><code class="en">IsValid</code>（有效判断）</td><td>判断对象引用是否可用（非空且未 <code class="en">pending kill</code>）</td><td><code class="en">Object</code>；<code class="en">Return Value</code>（bool）</td><td>调用对象函数前判空</td></tr>
+        <tr><td><code class="en">Select</code>（按索引取值）</td><td>按 <code class="en">Index</code> 从多个选项返回一个值（通配类型，变体含 <code class="en">Select Int</code> / <code class="en">Float</code> / <code class="en">String</code> / <code class="en">Class</code> / <code class="en">Object</code>）</td><td><code class="en">Option</code> 0 / <code class="en">Option</code> 1 / <code class="en">Index</code></td><td>按条件取两值之一</td></tr>
+        <tr><td><code class="en">Switch on Int</code> / <code class="en">String</code> / <code class="en">Name</code> / <code class="en">Enum</code>（按类型分支）</td><td>按输入值把执行送往匹配引脚，无匹配走 <code class="en">Default</code>；<code class="en">Switch on Enum</code> 自动生成枚举选项引脚</td><td><code class="en">Selection</code>；各 <code class="en">Case</code> + <code class="en">Default</code></td><td>按物品 <code class="en">ID</code>、状态分发逻辑</td></tr>
+        <tr><td><code class="en">Map Range Clamped</code>（范围映射（钳制））</td><td>把 <code class="en">Value</code> 从输入范围线性映射到输出范围，且钳制在输入范围内。示例：0.5 从 0→1 映射到 0→50 得 25</td><td><code class="en">Value</code> / <code class="en">In Range A</code>/<code class="en">B</code> / <code class="en">Out Range A</code>/<code class="en">B</code></td><td>血量百分比 → 颜色、速度 → <code class="en">FOV</code></td></tr>
+        <tr><td><code class="en">Map Range Unclamped</code>（范围映射（不钳制））</td><td>映射但不钳制。示例：20 从 10→50 映射到 20→40 得 25</td><td>同上</td><td>允许超出边界的映射</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><code class="en">UE5</code> 变化：旧版「<code class="en">MapRange</code>」已拆分为 <code class="en">Map Range Clamped</code>（范围映射（钳制）） 和 <code class="en">Map Range Unclamped</code>（范围映射（不钳制）） 两个节点。</p>
+
+    <h2 id="s8" class="hd lv2">三、数学节点</h2>
+
+    <h3 id="s9" class="hd lv3">3.1 算术运算</h3>
+
+    <p><code class="en">Add</code> / <code class="en">Subtract</code> / <code class="en">Multiply</code> / <code class="en">Divide</code>（加/减/乘/除）：两数值 / 向量加减乘除（编辑器里即 + - * / 运算符），有 <code class="en">Float</code> / <code class="en">Integer</code> / <code class="en">Vector</code> 版本。场景：加分、移动步长、伤害计算。</p>
+
+    <h3 id="s10" class="hd lv3">3.2 数值处理</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Clamp</code> (<code class="en">Float</code>/<code class="en">Integer</code>)（钳制）</td><td>把值钳制在 <code class="en">Min</code>~<code class="en">Max</code> 之间（含边界）</td><td>血量 0~100 封顶</td></tr>
+        <tr><td><code class="en">Absolute</code>（取绝对值）</td><td>取绝对值</td><td>距离差</td></tr>
+        <tr><td><code class="en">Max</code> / <code class="en">Min</code>（取大/取小）</td><td>返回两者较大 / 较小值</td><td>取最高伤害</td></tr>
+        <tr><td><code class="en">In Range</code>（区间判断）</td><td>判断值是否在范围内（<code class="en">Inclusive Min</code>/<code class="en">Max</code> 控制是否含边界），输出 bool</td><td>区间判定</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s11" class="hd lv3">3.3 插值（平滑过渡）</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">FInterp To</code>（浮点插值）</td><td>按距离自适应速率向目标逼近（速度给 0 直接跳变）</td><td>平滑数值渐变</td></tr>
+        <tr><td><code class="en">FInterp to Constant</code>（恒定速率插值）</td><td>恒定速率逼近目标</td><td>匀速渐变</td></tr>
+        <tr><td><code class="en">VInterp To</code> / <code class="en">VInterp to Constant</code>（向量插值）</td><td><code class="en">Vector</code> 版（恒定速率）平滑插值</td><td>摄像机跟随、平滑移动</td></tr>
+        <tr><td><code class="en">RInterp To</code>（旋转插值）</td><td><code class="en">Rotator</code> 版平滑旋转</td><td>炮塔 / 角色转向</td></tr>
+        <tr><td><code class="en">Lerp</code> (<code class="en">Float</code>/<code class="en">Vector</code>)（线性插值）</td><td>线性插值：<code class="en">Alpha</code>=0 取 100% <code class="en">A</code>，<code class="en">Alpha</code>=1 取 100% <code class="en">B</code></td><td>颜色 / 位置渐变</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s12" class="hd lv3">3.4 向量运算</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Dot Product</code>（点积）</td><td>点积，输出标量；前方=1、侧方=0、后方=-1</td><td>方向判断、视野判定</td></tr>
+        <tr><td><code class="en">Cross Product</code>（叉积）</td><td>叉积，输出垂直于两向量的向量</td><td>求法线、垂直方向</td></tr>
+        <tr><td><code class="en">Normalize</code>（单位化）</td><td>单位化。⚠️ 长度过小无法安全单位化时返回零向量</td><td>归一化方向</td></tr>
+        <tr><td><code class="en">Vector Length</code>（向量长度）</td><td>返回向量长度</td><td>距离检测</td></tr>
+        <tr><td><code class="en">Clamp Vector Size</code>（向量长度钳制）</td><td>长度钳制在 <code class="en">Min</code>~<code class="en">Max</code> 间（方向不变）</td><td>限速</td></tr>
+        <tr><td><code class="en">Distance</code> (<code class="en">Vector</code>)（两点距离）</td><td>两坐标点距离</td><td>敌人距玩家距离</td></tr>
+        <tr><td><code class="en">VectorZero</code> / <code class="en">VectorOne</code>（零向量/单位向量）</td><td>零向量 / 单位向量常量</td><td>初始化</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s13" class="hd lv3">3.5 随机数</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Random Float</code>（随机浮点数）</td><td>0~1 随机浮点</td><td>随机缩放</td></tr>
+        <tr><td><code class="en">Random Float in Range</code>（区间随机浮点数）</td><td><code class="en">Min</code>~<code class="en">Max</code> 随机浮点（含边界）</td><td>随机伤害浮动</td></tr>
+        <tr><td><code class="en">Random Integer</code>（随机整数）</td><td>0 ~ <code class="en">Max</code>-1 随机整数（仅 <code class="en">Max</code> 输入）</td><td>随机索引</td></tr>
+        <tr><td><code class="en">Random Integer in Range</code>（区间随机整数）</td><td><code class="en">Min</code>~<code class="en">Max</code> 随机整数（含边界）</td><td>随机掉落数量</td></tr>
+        <tr><td><code class="en">Random Unit Vector</code>（随机单位向量）</td><td>随机单位方向向量</td><td>粒子随机方向</td></tr>
+        <tr><td><code class="en">Random Bool</code>（随机布尔）</td><td>随机 true / <code class="en">false</code></td><td>随机行为</td></tr>
+        <tr><td><code class="en">Random Point in Bounding Box</code>（包围盒内随机点）</td><td>包围盒内随机点</td><td>随机出生点</td></tr>
+        <tr><td><code class="en">Make Random Stream</code>（可复现随机流）</td><td>可复现的随机流（同种子同结果）</td><td>调试、确定性生成</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s14" class="hd lv3">3.6 三角函数</h3>
+
+    <p><code class="en">Sin</code> / <code class="en">Cos</code> / <code class="en">Tan</code>（正弦/余弦/正切）：均有 (<code class="en">Radians</code>) 与 (<code class="en">Degrees</code>) 版本。场景：圆周运动、呼吸浮动动画。</p>
+
+    <p>另有 <code class="en">DegreesToRadians</code> / <code class="en">RadiansToDegrees</code>（角度与弧度互转）、<code class="en">Get PI</code> / <code class="en">TAU</code>（圆周率/<code class="en">TAU</code> 常量）、<code class="en">Atan2</code>（反正切二参数）。</p>
+
+    <h3 id="s15" class="hd lv3">3.7 布尔逻辑</h3>
+
+    <p><code class="en">NOT</code> / <code class="en">AND</code> / <code class="en">OR</code> / <code class="en">XOR Boolean</code>（逻辑非/与/或/异或）：逻辑取反 / 与 / 或 / 异或。场景：多条件组合判定。</p>
+
+    <h2 id="s16" class="hd lv2">四、变量与数据类型</h2>
+
+    <p>官方 <code class="en">Blueprint Variables</code> 页面（<code class="en">UE</code> 5.5）列出的核心类型及颜色：</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>类型</th><th>颜色</th><th>说明</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Boolean</code>（布尔）</td><td>紫红</td><td>true / <code class="en">false</code></td></tr>
+        <tr><td><code class="en">Byte</code>（字节）</td><td>藏蓝</td><td>0~255 整数（<code class="en">unsigned char</code>）</td></tr>
+        <tr><td><code class="en">Integer</code>（整数）</td><td>海绿</td><td>32 位整数</td></tr>
+        <tr><td><code class="en">Integer64</code>（64 位整数）</td><td>苔绿</td><td>64 位整数，<code class="en">UE5</code> 新增</td></tr>
+        <tr><td><code class="en">Float</code>（浮点数）</td><td>黄绿</td><td>小数</td></tr>
+        <tr><td><code class="en">Name</code>（名称）</td><td>淡紫</td><td>文本标识，比较速度快</td></tr>
+        <tr><td><code class="en">String</code>（字符串）</td><td>品红</td><td>字符文本</td></tr>
+        <tr><td><code class="en">Text</code>（文本）</td><td>粉</td><td>显示给用户的文本，适合本地化</td></tr>
+        <tr><td><code class="en">Vector</code>（向量）</td><td>金</td><td>(<code class="en">X</code>, <code class="en">Y</code>, <code class="en">Z</code>)，3<code class="en">D</code> 坐标或 <code class="en">RGB</code> 颜色</td></tr>
+        <tr><td><code class="en">Rotator</code>（旋转量）</td><td>矢车菊蓝</td><td>3<code class="en">D</code> 旋转（<code class="en">Pitch</code> / <code class="en">Yaw</code> / <code class="en">Roll</code>）</td></tr>
+        <tr><td><code class="en">Transform</code>（变换）</td><td>橙</td><td>平移 + 旋转 + 缩放组合</td></tr>
+        <tr><td><code class="en">Object</code>（对象）</td><td>蓝</td><td>引用对象 / 组件 / <code class="en">Actor</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>扩展类型：</p>
+
+    <ul class="bullets">
+      <li><code class="en">Struct</code>（结构体）：自定义复合数据（把多个字段打包）。场景：道具数据包（名称 + 价格 + 图标）。</li>
+      <li><code class="en">Enum</code>（枚举）：一组命名常量，配合 <code class="en">Switch on Enum</code>。场景：角色状态（<code class="en">Idle</code> / <code class="en">Walk</code> / <code class="en">Run</code> / <code class="en">Dead</code>）。</li>
+      <li><code class="en">Class Reference</code>（类引用）：引用蓝图类本身（<code class="en">Spawn Actor from Class</code> 输入、<code class="en">IsA</code> 判断类型），区别于对象引用。场景：指定生成哪种敌人。</li>
+      <li><code class="en">Interface</code>（接口）：让不同蓝图共享同一组函数契约（<code class="en">IsValidInterface</code> 节点存在）。场景：所有「可交互物」都实现 <code class="en">Interact</code>()。</li>
+    </ul>
+
+    <p>变量操作技巧：<code class="en">Ctrl</code> + 拖拽生成 <code class="en">Get</code>（读取），<code class="en">Alt</code> + 拖拽生成 <code class="en">Set</code>（写入）。</p>
+
+    <p>可见性设置：<code class="en">Public</code> / <code class="en">Instance Editable</code> 允许外部修改；<code class="en">Private</code> 阻止外部蓝图修改；<code class="en">Expose on Spawn</code> 允许生成时传参；<code class="en">Expose to Cinematics</code> 允许被 <code class="en">Sequencer</code> 驱动。</p>
+
+    <h2 id="s17" class="hd lv2">五、数组 / 映射 / 集合</h2>
+
+    <h3 id="s18" class="hd lv3">5.1 数组（<code class="en">Array</code>）</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Add</code>（添加）</td><td>元素加到末尾，返回新索引</td><td>收集物品</td></tr>
+        <tr><td><code class="en">Add Unique</code>（唯一添加）</td><td>添加但保证唯一，已存在返回 <code class="en">INDEX_NONE</code></td><td>避免重复收集</td></tr>
+        <tr><td><code class="en">Append Array</code>（追加数组）</td><td>整体追加另一个数组</td><td>合并掉落表</td></tr>
+        <tr><td><code class="en">Insert</code>（插入）</td><td>在指定索引处插入</td><td>排行榜插入</td></tr>
+        <tr><td><code class="en">Remove Index</code>（按索引删除）</td><td>按索引删除</td><td>移除指定项</td></tr>
+        <tr><td><code class="en">Remove Item</code>（按值删除）</td><td>按值删除（删所有匹配项）</td><td>清点同种物品</td></tr>
+        <tr><td><code class="en">Contains Item</code>（包含判断）</td><td>是否包含某元素（bool）</td><td>背包检查</td></tr>
+        <tr><td><code class="en">Find Item</code>（查找元素）</td><td>查找元素返回索引，找不到返回 -1</td><td>定位元素位置</td></tr>
+        <tr><td><code class="en">Get</code> (<code class="en">a copy</code>) / <code class="en">Get</code> (<code class="en">a ref</code>)（按索引取值）</td><td>按索引取元素（副本 / 引用）</td><td>取某个物品</td></tr>
+        <tr><td><code class="en">Length</code>（长度）</td><td>返回数组长度</td><td>背包满判断</td></tr>
+        <tr><td><code class="en">Last Index</code>（末尾索引）</td><td>返回最后一个有效索引（= 长度 - 1）</td><td>取末尾元素</td></tr>
+        <tr><td><code class="en">Is Valid Index</code>（索引有效判断）</td><td>索引是否有效</td><td>越界保护</td></tr>
+        <tr><td><code class="en">Set Array Elem</code>（按索引赋值）</td><td>按索引赋值（<code class="en">Size to Fit</code> 为 true 自动扩容）</td><td>更新指定槽位</td></tr>
+        <tr><td><code class="en">Clear</code>（清空）</td><td>清空数组</td><td>重置背包</td></tr>
+        <tr><td><code class="en">Resize</code>（调整大小）</td><td>调整数组大小</td><td>预分配</td></tr>
+        <tr><td><code class="en">Sort</code> / <code class="en">Shuffle</code> / <code class="en">Reverse</code> / <code class="en">Swap</code>（排序/洗牌/反转/交换）</td><td>排序 / 洗牌 / 反转 / 交换</td><td>抽奖洗牌、倒序列表</td></tr>
+        <tr><td><code class="en">Random Array Item</code>（随机元素）</td><td>随机取一个元素</td><td>随机奖励</td></tr>
+        <tr><td><code class="en">ForEachLoop</code>（遍历循环）</td><td>遍历数组</td><td>遍历敌人</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s19" class="hd lv3">5.2 映射 / 字典（<code class="en">Map</code>）</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Add</code>（添加）</td><td>添加键值对，后续按 <code class="en">Key</code> 取 <code class="en">Value</code></td><td>物品名 → 价格</td></tr>
+        <tr><td><code class="en">Remove</code>（删除）</td><td>删除指定 <code class="en">Key</code> 及其值，返回是否删除</td><td>移除玩家</td></tr>
+        <tr><td><code class="en">Find</code>（查找）</td><td>按 <code class="en">Key</code> 查找：返回 <code class="en">Value</code>（未找到返回默认值）+ <code class="en">Return Value</code>（bool）</td><td>查属性</td></tr>
+        <tr><td><code class="en">Contains</code>（包含判断）</td><td>检查 <code class="en">Key</code> 是否存在</td><td>玩家在线检查</td></tr>
+        <tr><td><code class="en">Keys</code> / <code class="en">Values</code>（键/值）</td><td>输出所有 <code class="en">Key</code> / <code class="en">Value</code> 数组</td><td>遍历玩家列表</td></tr>
+        <tr><td><code class="en">Length</code> / <code class="en">Is Empty</code> / <code class="en">Clear</code>（长度/判空/清空）</td><td>条目数 / 判空 / 清空</td><td>管理字典</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s20" class="hd lv3">5.3 集合（<code class="en">Set</code>，无序且元素唯一）</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Add</code> / <code class="en">Add Items</code>（添加元素）</td><td>添加元素（重复自动去重）</td><td>已访问地点记录</td></tr>
+        <tr><td><code class="en">Remove</code> / <code class="en">Remove Items</code>（移除元素）</td><td>移除元素</td><td>移除已处理项</td></tr>
+        <tr><td><code class="en">Contains Item</code>（包含判断）</td><td>是否包含</td><td>去重判断</td></tr>
+        <tr><td><code class="en">Union</code>（并集）</td><td>并集（去重）</td><td>合并两组技能</td></tr>
+        <tr><td><code class="en">Difference</code>（差集）</td><td>差集（<code class="en">A</code> 中不在 <code class="en">B</code> 的元素）</td><td>找出未拥有道具</td></tr>
+        <tr><td><code class="en">Intersection</code>（交集）</td><td>交集</td><td>找共同好友</td></tr>
+        <tr><td><code class="en">Length</code> / <code class="en">Is Empty</code>（数量/判空）</td><td>数量 / 判空</td><td>状态检查</td></tr>
+        <tr><td><code class="en">To Array</code> / <code class="en">Make Set</code>（转数组/创建集合）</td><td>集合转数组 / 创建集合</td><td>转数组后排序</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="s21" class="hd lv2">六、游戏框架节点</h2>
+
+    <p>以下均来自官方 <code class="en">GameplayStatics Blueprint API</code> 列表。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Get Player Controller</code> / <code class="en">Character</code> / <code class="en">Pawn</code>（获取玩家控制器/角色/<code class="en">Pawn</code>）</td><td>按 <code class="en">PlayerIndex</code> 获取玩家控制器 / 角色 / <code class="en">Pawn</code></td><td>获取玩家引用驱动 <code class="en">UI</code> 与逻辑</td></tr>
+        <tr><td><code class="en">Get Game Mode</code> / <code class="en">Get Game Mode as Actor</code>（获取游戏模式）</td><td>获取当前 <code class="en">GameMode</code>（游戏规则容器）</td><td>读全局规则、获取分数</td></tr>
+        <tr><td><code class="en">Spawn Actor</code> / <code class="en">Spawn Actor from Class</code>（生成 <code class="en">Actor</code>）</td><td>运行时生成 <code class="en">Actor</code></td><td>生成敌人、子弹、掉落物</td></tr>
+        <tr><td><code class="en">SpawnActorDeferred</code> + <code class="en">FinishSpawningActor</code>（延迟生成 <code class="en">Actor</code>）</td><td>先生成未完成体 → 改属性 → 再完成生成</td><td>生成前设置自定义参数</td></tr>
+        <tr><td><code class="en">Destroy Actor</code>（销毁 <code class="en">Actor</code>）</td><td>销毁 <code class="en">Actor</code></td><td>移除死亡敌人、飞出界子弹</td></tr>
+        <tr><td><code class="en">Set Life Span</code>（设置存活时间）</td><td>设置存活秒数后自动销毁</td><td>子弹存活 1 秒后消失</td></tr>
+        <tr><td><code class="en">Get World</code>（获取世界）</td><td>获取世界上下文（很多函数的隐式输入）</td><td>节点连线需要</td></tr>
+        <tr><td><code class="en">Get Actor of Class</code> / <code class="en">Get All Actors of Class</code>（按类查找 <code class="en">Actor</code>）</td><td>场景内按类查找 <code class="en">Actor</code></td><td>找所有敌人做 <code class="en">AOE</code></td></tr>
+        <tr><td><code class="en">Cast To</code>（类转换）</td><td>把基类引用转具体类引用，成功才可用其成员</td><td>把碰撞到的 <code class="en">Actor</code> 转成角色读取血量</td></tr>
+        <tr><td><code class="en">Get Player Character</code>（获取玩家角色）</td><td>获取玩家角色</td><td>常用入口</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="s22" class="hd lv2">七、<code class="en">AI</code> 相关节点</h2>
+
+    <h3 id="s23" class="hd lv3">7.1 <code class="en">AI</code> 移动</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">MoveToActor</code> / <code class="en">MoveToLocation</code>（移动到目标）</td><td><code class="en">AI Controller</code> 控制 <code class="en">Pawn</code> 沿 <code class="en">NavMesh</code> 寻路到目标 <code class="en">Actor</code> / 坐标，可设到达容忍度、允许部分路径</td><td><code class="en">AI</code> 追击玩家、巡逻</td></tr>
+        <tr><td><code class="en">SimpleMoveToActor</code> / <code class="en">SimpleMoveToLocation</code>（简单移动到目标）</td><td>简化版一键移动（不返回寻路结果）</td><td>简单追击、群体小怪</td></tr>
+        <tr><td><code class="en">Get Random Reachable Point in Radius</code>（半径内随机可达点）</td><td>导航区域内随机可达点</td><td>随机巡逻点</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s24" class="hd lv3">7.2 <code class="en">AI</code> 感知（<code class="en">AIPerception</code>）</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">On Perception Updated</code>（感知更新）</td><td>感知状态变化时触发，返回触发更新的 <code class="en">Actor</code> 数组</td><td><code class="en">AI</code> 发现目标</td></tr>
+        <tr><td><code class="en">On Target Perception Updated</code>（目标感知更新）</td><td>单个目标感知更新，返回 <code class="en">Actor</code> 与 <code class="en">AI Stimulus</code> 结构体（<code class="en">Age</code> / <code class="en">Strength</code> / 位置 / <code class="en">Tag</code> / <code class="en">Successfully Sensed</code>）</td><td>发现玩家进视线、听到枪声后切换警戒</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="bullets">
+      <li>感知六种类型：<code class="en">Sight</code> 视觉、<code class="en">Hearing</code> 听觉、<code class="en">Damage</code> 伤害、<code class="en">Touch</code> 触觉、<code class="en">Prediction</code> 预测、<code class="en">Team</code> 团队。</li>
+      <li>场景：<code class="en">AI</code> 通过感知 → 写 <code class="en">Blackboard</code> 变量 → 驱动行为树分支。</li>
+    </ul>
+
+    <h3 id="s25" class="hd lv3">7.3 行为树（<code class="en">Behavior Tree</code>）</h3>
+
+    <ul class="bullets">
+      <li>四类节点：<code class="en">Composite</code>（组合） 定义分支规则、<code class="en">Task</code>（任务） 叶子执行动作、<code class="en">Decorator</code>（装饰器） 条件判断、<code class="en">Service</code>（服务） 按频率执行。</li>
+      <li><code class="en">Run Behavior Tree</code>（运行行为树）：让 <code class="en">AIController</code> 运行指定行为树资产。场景：完整战斗 <code class="en">AI</code>（追击 / 搜索 / 攻击状态机）。</li>
+    </ul>
+
+    <h3 id="s26" class="hd lv3">7.4 <code class="en">EQS</code>（环境查询系统）</h3>
+
+    <ul class="bullets">
+      <li>组成：<code class="en">Generators</code>（生成候选位置 / <code class="en">Actor</code>）、<code class="en">Contexts</code>（参考系）、<code class="en">Tests</code>（对候选项打分）。</li>
+      <li>场景：找最佳攻击位、最近的弹药 / 血包 / 掩体。</li>
+    </ul>
+
+    <h2 id="s27" class="hd lv2">八、动画相关节点</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点 / 概念</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Animation Blueprint</code>（动画蓝图）</td><td>控制骨骼网格动画的专用蓝图，含 <code class="en">Event Graph</code> + <code class="en">AnimGraph</code></td><td>角色动画</td></tr>
+        <tr><td><code class="en">GetStateMachineInstance</code> / <code class="en">GetStateMachine</code>（获取状态机实例）</td><td>获取 <code class="en">AnimGraph</code> 状态机实例，查询 / 操作当前状态</td><td>站立 / 走 / 跑 / 跳切换</td></tr>
+        <tr><td><code class="en">Play Montage</code>（播放蒙太奇）</td><td>播放蒙太奇（多段动画组合资产，支持 <code class="en">Section</code> / <code class="en">Notify</code>）</td><td>攻击、施法、换弹</td></tr>
+        <tr><td><code class="en">Montage_Stop</code> / <code class="en">Montage_JumpToSection</code> / <code class="en">Montage_SetNextSection</code> / <code class="en">GetCurrentMontage</code>（蒙太奇控制）</td><td>停止 / 跳到某段 / 设置下一段 / 查询当前蒙太奇</td><td>打断攻击、连招</td></tr>
+        <tr><td><code class="en">Montage</code> 事件（<code class="en">On Montage Started</code> / <code class="en">Blending Out</code> / <code class="en">Ended</code> / <code class="en">On Notify</code>）</td><td>蒙太奇生命周期回调 + 动画 <code class="en">Notify</code></td><td>攻击帧命中判定、动画结束接逻辑</td></tr>
+        <tr><td><code class="en">Blend Space</code> (1<code class="en">D</code>/2<code class="en">D</code>) / <code class="en">Aim Offset</code>（混合空间/瞄准偏移）</td><td>多个动画按一维 / 二维图混合；<code class="en">Blend Space Player</code> 在 <code class="en">AnimGraph</code> 中按速度 + 方向采样</td><td>移动动画混合（idle / 走 / 跑 / 各方向）</td></tr>
+        <tr><td><code class="en">IK Rig</code> / <code class="en">IK Retargeter</code>（<code class="en">IK</code> 装备/重定向）</td><td><code class="en">IK</code> 资产（<code class="en">Goals</code> 目标 + <code class="en">Solvers</code> 求解器）；<code class="en">IK Goals</code> 暴露 <code class="en">Position</code> / <code class="en">Rotation</code> 引脚在 <code class="en">AnimGraph</code> 驱动</td><td>脚部贴合地形、手扶墙、<code class="en">Full Body IK</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="s28" class="hd lv2">九、物理与碰撞节点</h2>
+
+    <h3 id="s29" class="hd lv3">9.1 力与速度</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">AddImpulse</code>（施加冲量）</td><td>瞬间冲量，立即改变速度</td><td>击飞、爆炸冲击</td></tr>
+        <tr><td><code class="en">AddImpulseAtLocation</code> / <code class="en">AddForce</code> / <code class="en">AddTorque</code>（冲量/力/力矩）</td><td>指定位置冲量 / 持续力 / 力矩</td><td>推箱子、风扇吹风</td></tr>
+        <tr><td><code class="en">SetPhysicsLinearVelocity</code> / <code class="en">SetPhysicsAngularVelocity</code>（设定线/角速度）</td><td>直接设定线速度 / 角速度</td><td>投掷物初速</td></tr>
+        <tr><td><code class="en">SetSimulatePhysics</code>（开关物理模拟）</td><td>开关物理模拟（<code class="en">Chaos Physics</code> 驱动）</td><td>布娃娃、可投掷物、碎片掉落</td></tr>
+        <tr><td><code class="en">SetEnableGravity</code>（开关重力）</td><td>开关重力</td><td>失重漂浮</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s30" class="hd lv3">9.2 物理材质</h3>
+
+    <p><code class="en">Physical Material</code>（物理材质）：定义表面摩擦（<code class="en">Friction</code>）、弹性（<code class="en">Restitution</code>）等。场景：冰面打滑、橡皮球弹跳、不同材质脚步声。</p>
+
+    <h3 id="s31" class="hd lv3">9.3 射线 / 形状检测（<code class="en">Trace</code>）</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">LineTraceByChannel</code> / <code class="en">ByObjectType</code> / <code class="en">ByProfile</code>（线性检测）</td><td>起点到终点直线，返回首个命中（<code class="en">Block</code> / <code class="en">Overlap</code>），基于碰撞通道（<code class="en">Visibility</code> / <code class="en">Camera</code> / <code class="en">WorldStatic</code> / <code class="en">WorldDynamic</code>）</td><td>枪械命中、视线检测</td></tr>
+        <tr><td><code class="en">SphereTrace</code> / <code class="en">BoxTrace</code> / <code class="en">CapsuleTrace</code>（体积检测） 及 <code class="en">ByChannel</code> / <code class="en">ByObjectType</code> 变体</td><td>体积扫描</td><td>区域内检测</td></tr>
+        <tr><td><code class="en">SphereOverlapActors</code> / <code class="en">BoxOverlapActors</code> 等（体积重叠查询）</td><td>查询某体积内重叠的 <code class="en">Actor</code>（不依赖事件）</td><td>即时范围查询</td></tr>
+        <tr><td><code class="en">OnComponentHit</code>（组件碰撞事件）</td><td>物理碰撞瞬间触发</td><td>子弹着点、落地音效</td></tr>
+        <tr><td><code class="en">OnComponentBeginOverlap</code> / <code class="en">EndOverlap</code>（组件重叠进出）</td><td>进入 / 离开重叠区域</td><td>触发区域、压力板、拾取判定</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="s32" class="hd lv2">十、<code class="en">UI</code> 节点（<code class="en">UMG</code>）</h2>
+
+    <p><code class="en">UMG</code> = <code class="en">Unreal Motion Graphics</code>，<code class="en">UI</code> 单位是 <code class="en">User Widget</code> / <code class="en">Widget Blueprint</code>。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Create Widget</code>（创建控件）</td><td>运行时创建指定 <code class="en">Widget Blueprint</code> 实例</td><td>打开 <code class="en">HUD</code>、菜单、弹窗</td></tr>
+        <tr><td><code class="en">Add to Viewport</code>（添加到视口）</td><td>把 <code class="en">Widget</code> 加入屏幕视口（可带 <code class="en">ZOrder</code> 层级）</td><td>显示 <code class="en">HUD</code> / 主菜单</td></tr>
+        <tr><td><code class="en">Remove from Parent</code>（从父级移除）</td><td>从父容器 / 视口移除</td><td>关闭菜单</td></tr>
+        <tr><td><code class="en">Set Visibility</code> / <code class="en">Set Visibility by Bool</code>（设置显隐）</td><td><code class="en">Visible</code> / <code class="en">Hidden</code> / <code class="en">Collapsed</code> 三种显隐</td><td>切换 <code class="en">UI</code> 面板</td></tr>
+        <tr><td><code class="en">Set Render Opacity</code> / <code class="en">Set Color and Opacity</code>（透明度/颜色设置）</td><td>整 <code class="en">Widget</code> 透明度 / 颜色</td><td>淡入淡出、受伤闪红</td></tr>
+        <tr><td>按钮事件 <code class="en">OnClicked</code> / <code class="en">OnPressed</code> / <code class="en">OnReleased</code></td><td>按钮点击触发</td><td>菜单按钮、确认弹窗</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="s33" class="hd lv2">十一、渲染 / 视觉节点</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点 / 概念</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Set Material</code> / <code class="en">Set Material by Name</code>（设置材质）</td><td>运行时替换网格体槽位材质</td><td>换皮肤、受击变红、选中高亮</td></tr>
+        <tr><td><code class="en">Create Dynamic Material Instance</code>（<code class="en">MID</code>）</td><td>动态材质实例：运行时改参数且不改资产</td><td>血条随血量变色</td></tr>
+        <tr><td><code class="en">Post Process Volume</code>（后处理体积）</td><td>后处理体积（可 <code class="en">Unbound</code> 全局），含景深 / 运动模糊 / 色调 / 泛光 / 曝光 / 色差 / 暗角 / <code class="en">AO</code> / 胶片颗粒</td><td>受伤全屏红、风格化滤镜</td></tr>
+        <tr><td><code class="en">Post Process Material</code>（后处理材质）</td><td><code class="en">Domain</code> 设为 <code class="en">Post Process</code> 的材质做全屏特效</td><td>屏幕特效</td></tr>
+        <tr><td><code class="en">Niagara</code>：<code class="en">Spawn System at Location</code> / <code class="en">Spawn System Attached</code></td><td>运行时生成粒子系统</td><td>爆炸、火焰、烟雾、拖尾、枪口火花</td></tr>
+        <tr><td><code class="en">Set Niagara Variable</code> (<code class="en">Float</code>/<code class="en">Vec3</code>/<code class="en">Color</code>)（设置粒子变量）</td><td>运行时设置粒子变量</td><td>控制粒子颜色 / 速度</td></tr>
+        <tr><td>灯光：<code class="en">Set Intensity</code> / <code class="en">Set Light Color</code> / <code class="en">Set Visibility</code></td><td>运行时控制强度 / 颜色 / 开关</td><td>昼夜循环、灯泡开关、爆炸闪光</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><code class="en">UE5</code> 变化：<code class="en">Niagara</code> 取代旧 <code class="en">Cascade</code> 粒子系统（<code class="en">Cascade</code> 仍可用但不再维护）。</p>
+
+    <h2 id="s34" class="hd lv2">十二、音频节点</h2>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Play Sound</code> 2<code class="en">D</code>（播放 2<code class="en">D</code> 音效）</td><td>播放无空间位置的 2<code class="en">D</code> 音效</td><td><code class="en">UI</code> 点击音</td></tr>
+        <tr><td><code class="en">Play Sound at Location</code>（播放音效（位置））</td><td>在 3<code class="en">D</code> 世界坐标播放，带空间衰减</td><td>枪声、脚步声、爆炸声</td></tr>
+        <tr><td><code class="en">Audio Component</code>：<code class="en">Play</code> / <code class="en">Stop</code> / <code class="en">SetVolumeMultiplier</code> / <code class="en">SetPitchMultiplier</code> / <code class="en">SetPaused</code> / <code class="en">FadeIn</code> / <code class="en">FadeOut</code> / <code class="en">SetSound</code>（音频组件控制）</td><td>挂 <code class="en">Actor</code> 上的音频组件控制</td><td>循环背景音乐、可控音量音源</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="s35" class="hd lv2">十三、输入节点</h2>
+
+    <p><code class="en">UE5</code> 默认启用 <code class="en">Enhanced Input</code>（增强输入） 插件，取代旧 <code class="en">Action</code> / <code class="en">Axis Mapping</code> 系统（旧系统向后兼容但新项目推荐用 <code class="en">Enhanced Input</code>）。</p>
+
+    <h3 id="s36" class="hd lv3">13.1 <code class="en">Enhanced Input</code> 体系</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>概念</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Input Action</code>（输入动作） 数据资产</td><td>定义「玩家能做什么」，值类型 bool / <code class="en">Axis1D</code> / <code class="en">Axis2D</code> / <code class="en">Axis3D</code>；蓝图右键输入动作名即生成 <code class="en">Input Action Event</code>（输入动作事件） 节点</td><td>跳跃、射击等动作定义</td></tr>
+        <tr><td><code class="en">Input Mapping Context</code>（输入映射上下文） 数据资产</td><td>把按键绑定到 <code class="en">Action</code>；<code class="en">AddMappingContext</code>(..., <code class="en">Priority</code>) / <code class="en">RemoveMappingContext</code> 运行时增删、按优先级竞争</td><td>键位重映射、上下文切换</td></tr>
+        <tr><td><code class="en">Input Modifier</code>（输入修饰器）</td><td>原始输入预处理：<code class="en">Negate</code> 取反、<code class="en">Swizzle</code> 轴向交换、<code class="en">Dead Zone</code> 死区</td><td>反转手柄 <code class="en">Y</code> 轴</td></tr>
+        <tr><td><code class="en">Input Trigger</code>（输入触发器）</td><td>激活规则：<code class="en">Tap</code> 轻点、<code class="en">Hold</code> 按住、<code class="en">Chorded Action</code> 组合键</td><td>蓄力、组合键大招</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s37" class="hd lv3">13.2 事件输出状态</h3>
+
+    <p><code class="en">Input Action</code> 事件节点随触发状态输出：<code class="en">Started</code>（按下）、<code class="en">Triggered</code>（满足触发条件）、<code class="en">Completed</code>（抬起 / 完成）、<code class="en">Canceled</code> 等。</p>
+
+    <h2 id="s38" class="hd lv2">十四、网络 / 多人节点</h2>
+
+    <p>核心模型：主机权威（<code class="en">Server</code>-<code class="en">Authoritative</code>），服务器做最终裁决。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Is Locally Controlled</code>（本地控制判断）</td><td>判断当前机器是否该 <code class="en">Actor</code> 的本地控制端</td><td>只在本地玩家上跑输入 / 摄像机</td></tr>
+        <tr><td><code class="en">Has Authority</code>（权威判断）</td><td>判断当前实例是否有权威（服务器；单机时本地即服务器）</td><td>只在服务器算伤害、生成实体</td></tr>
+        <tr><td><code class="en">Server RPC</code>（服务器远程调用）</td><td>客户端请求服务器执行</td><td>开火判定</td></tr>
+        <tr><td><code class="en">Client RPC</code>（客户端远程调用）</td><td>服务器让特定客户端执行</td><td>命中反馈</td></tr>
+        <tr><td><code class="en">Multicast RPC</code>（多播远程调用）</td><td>服务器广播到所有客户端（含本机）</td><td>爆炸特效</td></tr>
+        <tr><td><code class="en">Replicated</code> 变量 / <code class="en">Set Replicates</code> / <code class="en">Set Replicate Movement</code></td><td>属性 / 移动标记复制后由服务器同步到客户端</td><td>生命值、分数、角色位置</td></tr>
+        <tr><td><code class="en">Get Local Role</code> / <code class="en">Get Remote Role</code>（获取网络角色）</td><td>返回 <code class="en">ROLE_Authority</code> / <code class="en">ROLE_AutonomousProxy</code> / <code class="en">ROLE_SimulatedProxy</code></td><td>判断网络角色决定分支</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="s39" class="hd lv2">十五、<code class="en">UE5</code> 新增 / 改名 / 弃用节点</h2>
+
+    <ul class="bullets">
+      <li><code class="en">MapRange</code> → 拆分：旧「<code class="en">MapRange</code>」在 <code class="en">UE5</code> 中拆为 <code class="en">Map Range Clamped</code>（钳制）和 <code class="en">Map Range Unclamped</code>（不钳制）；<code class="en">C</code>++ 侧新增 <code class="en">MapRangeUnsafe</code>（快速版，未确认是否暴露为蓝图节点）。</li>
+      <li><code class="en">Integer64</code>（64 位整数）：<code class="en">UE5</code> 新增 64 位整数变量类型（大数值场景）。</li>
+      <li><code class="en">Enhanced Input</code>（增强输入）：默认启用，替代旧 <code class="en">Action</code> / <code class="en">Axis Mapping</code> 输入系统。</li>
+      <li><code class="en">Niagara</code>（粒子系统框架）：取代旧 <code class="en">Cascade</code> 粒子系统。</li>
+      <li><code class="en">Event Destroyed</code>（被销毁）：官方标注未来弃用，功能并入 <code class="en">EndPlay</code>（结束播放）。</li>
+      <li>弹簧插值：新增 <code class="en">Float</code> / <code class="en">Vector</code> / <code class="en">Quaternion Spring Interp</code>（弹簧插值） 系列平滑节点（自 5.2 / 5.3 已有）。</li>
+      <li><code class="en">AnimNext</code> → <code class="en">UAF</code>（<code class="en">Unreal Animation Framework</code>）：5.6 是命名过渡期，5.7 起官方文档完全改用 <code class="en">UAF</code>（动画框架） 名称（两者是同一套东西，查资料时注意）。</li>
+      <li><code class="en">RandomInteger</code> / <code class="en">RandomInteger64</code>（随机整数 / 随机 64 位整数）（5.6）：参数 <code class="en">Max</code> 改名为 `<code class="en">Max Exclusive</code>`（仅蓝图侧显示名，强调上界排他）。</li>
+      <li><code class="en">Iris</code> 网络框架（5.7）：从 <code class="en">Experimental</code> 升至 <code class="en">Beta</code>（测试版），支持无缝旅行（<code class="en">Seamless Travel</code>）。</li>
+      <li><code class="en">PCG</code>（5.7）：<code class="en">Production Ready</code>（生产可用），新增 <code class="en">PCG Editor Mode</code>（主要影响 <code class="en">PCG</code> 图内算子，蓝图侧无重大新增）。</li>
+    </ul>
+
+    <h2 id="s40" class="hd lv2">十六、<code class="en">UE</code> 5.6 / 5.7 增量内容（面向 5.7 用户）</h2>
+
+    <p>以下均来自官方 5.5 / 5.6 / 5.7 发布说明原文核实（官方文档 <code class="en">API</code>）。5.7 的正文内容对 5.7 用户全部适用。</p>
+
+    <h3 id="s41" class="hd lv3">16.1 数学 / 流程节点新增（5.7）</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">ToRotationVector</code>（转旋转向量）</td><td>把旋转转为旋转向量（<code class="en">Kismet Math</code> 新增）</td><td>旋转相关向量运算</td></tr>
+        <tr><td><code class="en">MakeFromRotationVector</code>（从旋转向量构造）</td><td>从旋转向量构造旋转</td><td>与上者互逆</td></tr>
+        <tr><td><code class="en">GetShortestArcWith</code>（最短弧线）</td><td>获取最短弧线</td><td>转向 / 朝向计算</td></tr>
+        <tr><td><code class="en">Debug Draw</code> 系列新增屏幕深度优先级</td><td>绘制时可选 <code class="en">screen depth priority</code></td><td>调试信息层级显示</td></tr>
+        <tr><td><code class="en">SetFocusInViewport</code>（设置视口焦点）</td><td>脚本化工具把焦点交给视口以透传按键</td><td>编辑器工具</td></tr>
+        <tr><td><code class="en">SpringMath</code>（原 <code class="en">AnimationMath</code> 更名公开）</td><td>新增 <code class="en">Velocity Spring</code>（速度弹簧） 函数和角色预测函数</td><td>弹簧动力学、角色移动预测</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s42" class="hd lv3">16.2 <code class="en">GAS</code>（<code class="en">Gameplay Ability System</code>）新函数（5.7）</h3>
+
+    <p><code class="en">AbilitySystemBlueprintLibrary</code> 新增（专为只有 <code class="en">GE spec</code> / <code class="en">active handle</code> 的场景设计）：</p>
+
+    <ul class="bullets">
+      <li><code class="en">GetGrantedTags</code> / <code class="en">GetAssetTags</code>（获取授予/资产标签）：从 <code class="en">GameplayEffect SpecHandle</code> 读标签</li>
+      <li><code class="en">IsDurationGameplayEffectSpecHandle</code>（持续时间 <code class="en">GE</code> 判断）：判断 <code class="en">GE</code> 是即时还是持续</li>
+      <li><code class="en">IsActiveGameplayEffectHandleValid</code> / <code class="en">IsActiveGameplayEffectHandleActive</code>（活跃 <code class="en">GE</code> 句柄判断）：判断 <code class="en">active handle</code> 是否有效 / 活跃</li>
+      <li><code class="en">GetAbilitySystemComponentFromActiveGameplayEffectHandle</code>（从活跃 <code class="en">GE</code> 取 <code class="en">ASC</code>）：从 <code class="en">active handle</code> 取 <code class="en">ASC</code></li>
+      <li><code class="en">HasAnyAbilitiesWithCondition</code> / <code class="en">HasAnyAbilitiesWithAssetTag</code>（能力查询）：能力查询</li>
+      <li>新增预测性 <code class="en">GameplayEffect</code> 堆叠及堆叠溢出处理</li>
+    </ul>
+
+    <p>场景：<code class="en">GE</code> 状态检查、技能解锁判断、<code class="en">Buff</code> 标签读取。</p>
+
+    <h3 id="s43" class="hd lv3">16.3 <code class="en">State Tree</code>（5.6 / 5.7，<code class="en">AI</code> 状态机新方向）</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>功能</th><th>版本</th><th>说明</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Task Control Flow</code>（任务控制流）</td><td>5.6</td><td>精确控制哪些任务完成后才触发状态转场</td></tr>
+        <tr><td><code class="en">Delegate</code> 系统</td><td>5.6</td><td><code class="en">Dispatcher</code> / <code class="en">Listener</code> 绑定，任务级委托驱动转场</td></tr>
+        <tr><td><code class="en">Scheduled Ticks</code>（定时 <code class="en">Tick</code>）</td><td>5.6</td><td>按需 tick、每状态 tick 间隔、休眠自动唤醒</td></tr>
+        <tr><td><code class="en">Live Property Binding</code>（实时属性绑定）</td><td>5.7</td><td><code class="en">Output Properties</code> 运行期动态推值</td></tr>
+        <tr><td><code class="en">ExecutionRuntimeData</code>（执行运行时数据）</td><td>5.7</td><td>跨转场 / tick 的实例级长生命周期数据</td></tr>
+        <tr><td><code class="en">Re</code>-<code class="en">Enter State</code>（重入状态）</td><td>5.7</td><td>重入同一状态并重启任务（可选用）</td></tr>
+        <tr><td><code class="en">RunStateTreeRunStateTree</code>（运行状态树）</td><td>5.7</td><td>蓝图辅助函数：在 <code class="en">actor</code> 上执行 <code class="en">StateTree</code>，自动补组件</td></tr>
+        <tr><td><code class="en">Consideration Multiply</code> 运算符</td><td>5.7</td><td><code class="en">Consideration</code> 得分新增乘法</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>场景：比行为树更轻量的 <code class="en">AI</code> 状态机（5.7 起蓝图可直接跑）。</p>
+
+    <h3 id="s44" class="hd lv3">16.4 <code class="en">Motion Matching</code> 与 <code class="en">Choosers</code>（5.7，<code class="en">Experimental</code>）</h3>
+
+    <ul class="bullets">
+      <li><code class="en">Chooser</code> 新增 <code class="en">Pose Search</code> 字段：资产级有效性过滤（此前只能数据库层面过滤）+ 集成调试</li>
+      <li>新增 <code class="en">Chooser</code> 列类型 <code class="en">FPoseSearchColumn</code>（姿态搜索列）</li>
+      <li><code class="en">PoseSearchDatabase</code> 搜索支持返回多个结果</li>
+      <li><code class="en">FAnimNode_MotionMatching</code> 实验性交互搜索（多角色运动匹配）</li>
+    </ul>
+
+    <p>场景：高质量动画选择（奔跑 / 转身 / 跳跃的自动衔接）。</p>
+
+    <h3 id="s45" class="hd lv3">16.5 <code class="en">Mover</code> 插件（5.7，蓝图可用）</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>功能</th><th>说明</th><th>场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">User</code>-<code class="en">Defined Struct</code> 支持</td><td>纯蓝图用户无需原生代码即可携带自定义数据</td><td>自定义移动数据</td></tr>
+        <tr><td>可蓝图化分层移动（<code class="en">Layered Moves</code>）</td><td>拆分 <code class="en">Layered Move Logic</code> 与 <code class="en">Data</code>，支持原生 + 蓝图双写</td><td>复杂移动（墙跳、滑铲）</td></tr>
+        <tr><td><code class="en">SimpleSpringWalkingMode</code>（简单弹簧行走模式）</td><td><code class="en">SpringMath</code> 临界阻尼速度弹簧模型（平移 + 旋转），支持网络</td><td>平滑走路</td></tr>
+        <tr><td><code class="en">MoveInput</code> 改为 <code class="en">BlueprintReadOnly</code></td><td>只能经专用函数设置，保证客户端 / 服务器一致</td><td>网络移动安全</td></tr>
+        <tr><td>蒙太奇复制支持</td><td><code class="en">MoverComponent</code> 支持 <code class="en">Montage</code> 复制</td><td>移动中播放动作</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><code class="en">Mover</code> 是新一代角色移动框架（替代 <code class="en">CharacterMovementComponent</code> 的方向），5.7 起蓝图支持显著增强。</p>
+
+    <h3 id="s46" class="hd lv3">16.6 <code class="en">Enhanced Input</code> 增量（5.6 / 5.7）</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>功能</th><th>版本</th><th>说明</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">RegistrationTrackingMode</code>（注册追踪模式）</td><td>5.6</td><td>控制同一 <code class="en">Input Mapping Context</code> 多次注册的处理方式</td></tr>
+        <tr><td><code class="en">SetShouldConsume</code>（设置输入消费）</td><td>5.7</td><td>在绑定 <code class="en">action handle</code> 上设置是否消费输入</td></tr>
+        <tr><td>虚拟 <code class="en">Accept</code> / <code class="en">Back</code> 按键</td><td>5.7</td><td>新增可绑定的虚拟确定 / 返回键（<code class="en">FKeys</code> + <code class="en">IsVirtual</code> 标志）</td></tr>
+        <tr><td><code class="en">OnPostUserSettingsInitialized</code> / <code class="en">OnKeyProfileChanged</code>（输入设置委托）</td><td>5.7</td><td>新委托，可蓝图绑定</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s47" class="hd lv3">16.7 游戏框架 / 网络增量</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>功能</th><th>版本</th><th>说明</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">LoadGameIfExistsAsync</code>（存档存在则异步加载）</td><td>5.7</td><td><code class="en">SaveGame</code> 系统新增：合并存在性检查与异步加载，避免多一帧延迟</td></tr>
+        <tr><td><code class="en">IsPrimaryPlayer</code>() 暴露为 <code class="en">BlueprintPure</code></td><td>5.6</td><td>判断主玩家</td></tr>
+        <tr><td><code class="en">ReleaseGameFeaturePlugins</code>（卸载游戏特性插件）</td><td>5.7</td><td>一次卸载多个 <code class="en">GameFeature</code> 插件，批量 <code class="en">GC</code> 提升卸载性能</td></tr>
+        <tr><td><code class="en">Iris</code> 升至 <code class="en">Beta</code></td><td>5.7</td><td>支持无缝旅行；复制生命周期 <code class="en">API</code> 改名 <code class="en">StartActorReplication</code> / <code class="en">OnBeginReplication</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s48" class="hd lv3">16.8 动画 / 编辑器其他增量（5.6 / 5.7）</h3>
+
+    <ul class="bullets">
+      <li><code class="en">Rig Locomotor</code>（程序化行走）（5.6，<code class="en">Experimental</code>）：<code class="en">Control Rig</code> 内程序化行走 rig 插件（如蜘蛛爬行），任意肢体数量</li>
+      <li><code class="en">Control Rig</code> 新增 <code class="en">Damp</code> / <code class="en">Critical Spring Damp</code> 节点、<code class="en">line trace</code> 单元节点（5.7）</li>
+      <li>动画属性改为插值混合（5.6）：解决非零默认值属性从零混合的问题</li>
+      <li><code class="en">Ease Curve</code> 工具（5.7，<code class="en">Beta</code>）：进入 <code class="en">Sequencer</code>，可应用到 <code class="en">Sequencer</code> / 曲线编辑器 / <code class="en">UMG</code></li>
+      <li><code class="en">Audio Insights</code>（音频剖析工具）（5.7，<code class="en">Beta</code>）：音频剖析 / 调试主工具</li>
+      <li><code class="en">AI Assistant</code>（<code class="en">AI</code> 助手）（5.7，<code class="en">Experimental</code>）：编辑器内 <code class="en">AI</code> 助手</li>
+      <li><code class="en">MLDeformer</code> 新增 <code class="en">Detail Pose Model</code>（5.6）：关键姿势补回 <code class="en">ML</code> 重建丢失细节（衣物褶皱）</li>
+    </ul>
+
+    <h2 id="s49" class="hd lv2">十七、蓝图节点补充与组合实战（面向 5.7）</h2>
+
+    <p>定位：本章是《节点大全》正文的补充，内容与官方 5.7 发布说明及官方 <code class="en">Blueprint</code> 文档（<code class="en">Nodes</code> / <code class="en">Blueprint Communication Usage</code>，均以 <code class="en">application_version</code>=5.7 核实）一致，分四部分：① 节点连接机制；② 5.7 蓝图增量（正文未收录）；③ 高频节点组合链实战；④ 常见接法误区与学习资源。</p>
+
+    <h3 id="s50" class="hd lv3">17.1 先搞懂：节点之间是怎么连的（官方机制）</h3>
+
+    <p>来源：官方文档 <code class="en">Nodes in Unreal Engine</code>（5.7）。线有两类，含义完全不同。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>类型</th><th>连线外观与含义</th><th>例</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Execution</code>（执行）</td><td>白色箭头线，表示执行先后顺序——上一节点跑完才跑下一个；<code class="en">Function Call</code> 节点永远只有 1 进 1 出</td><td><code class="en">BeginPlay</code> →</td></tr>
+        <tr><td><code class="en">Data</code>（数据）</td><td>彩色线（颜色 = 类型颜色），表示传值，不控制执行顺序；数据引脚按类型着色</td><td>血量、坐标、引用</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>关键点：白线决定「先做哪件事」，彩线决定「用什么值做」。彩线连上不会触发节点执行，必须有一条白线流触发节点。未接线时引脚显示为空心圆，接好线后为实心圆。</p>
+
+    <ul class="bullets">
+      <li><code class="en">Auto</code>-<code class="en">Casting</code>（自动转换）：把 <code class="en">A</code> 类型引脚拖到兼容的 <code class="en">B</code> 类型引脚时，引擎自动插入转换节点（如 <code class="en">Float</code>→<code class="en">Int</code>、<code class="en">Object</code>→<code class="en">Actor</code> 的 <code class="en">Cast</code>），工具提示会显示兼容类型。</li>
+      <li><code class="en">Promote to Variable</code>（提升为变量）：右键任意数据引脚 → <code class="en">Promote to Variable</code>，自动创建变量并连线（输出引脚会生成 <code class="en">Set</code> 节点）。</li>
+      <li><code class="en">Reroute</code>（路由节点）：纯整理用，可当「接线桩」把长线折弯 / 分流，不改变任何数据。</li>
+      <li><code class="en">Collapse Nodes</code>（折叠图）+ <code class="en">Tunnels</code>（隧道节点）：选中多个节点右键折叠成子图，自动生成 <code class="en">Inputs</code> / <code class="en">Outputs</code> 隧道节点对外通信；折叠图不跨蓝图共享，本质是「把图藏起来」而非复用。</li>
+      <li>断开连线：<code class="en">Alt</code> + <code class="en">Click</code> 引脚，或右键引脚 → <code class="en">Break Link</code>(s)。</li>
+      <li>找节点高效姿势：从某引脚拖线到空白处 → 弹出只显示兼容节点的菜单（比右键空白处找全列表快得多）。</li>
+    </ul>
+
+    <h3 id="s51" class="hd lv3">17.2 <code class="en">UE</code> 5.7 蓝图增量补充（官方核实，正文未收录）</h3>
+
+    <p>来源：官方 <code class="en">UE</code> 5.7 <code class="en">Release Notes</code>（<code class="en">application_version</code>=5.7）。第十六章已收录的（<code class="en">RunStateTreeRunStateTree</code>、<code class="en">ToRotationVector</code> / <code class="en">MakeFromRotationVector</code> / <code class="en">GetShortestArcWith</code>、<code class="en">Debug Draw</code> 屏幕深度优先级、<code class="en">SpringMath</code>、<code class="en">GAS</code> 新函数等）不重复，下表是正文没有的 5.7 蓝图增量。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点 / 功能</th><th>所属系统</th><th>作用</th><th>实用场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">MetaSound literal</code> 相等运算符</td><td><code class="en">MetaSound</code> / 音频</td><td>蓝图里可直接用 == 比较 <code class="en">MetaSound</code> 字面量</td><td>音频配置比对、判定当前播放对象</td></tr>
+        <tr><td>排队播放字幕节点</td><td><code class="en">Audio Subtitle</code> 插件</td><td>把 <code class="en">Asset UserData</code> 里所有字幕一次排队播放；另有 <code class="en">StopSubtitlesInAsset</code> 函数</td><td>过场动画批量字幕、多语言对话</td></tr>
+        <tr><td><code class="en">Widget</code> 热替换函数</td><td><code class="en">UMG</code></td><td>运行时把一个 <code class="en">Widget</code> 热替换成另一个</td><td>动态换 <code class="en">UI</code> 皮肤、换弹窗样式</td></tr>
+        <tr><td><code class="en">Skeleton Curve Metadata API</code></td><td>动画</td><td>骨骼上查询 / 添加 / 删除 / 重命名曲线元数据，并可读写材质与 <code class="en">Morph Target</code> 标志</td><td>运行时查动画曲线信息、程序化控制表情 / 衣物</td></tr>
+        <tr><td><code class="en">Sequencer</code> 节点状态 <code class="en">API</code></td><td><code class="en">Sequencer</code></td><td>用蓝图 / <code class="en">Python get</code> / set 节点的 <code class="en">Mute</code> / <code class="en">Solo</code> / <code class="en">Deactivated</code> / <code class="en">Locked</code> / <code class="en">Pinned</code> 状态与 <code class="en">Binding Tags</code></td><td>运行时开关关卡序列里的轨道</td></tr>
+        <tr><td><code class="en">Disable Preview Platform</code> 节点</td><td>移动 / 编辑器</td><td>关闭「预览平台」的蓝图节点</td><td>真机调试、平台差异处理</td></tr>
+        <tr><td><code class="en">UserWidgetExtension</code>::<code class="en">InitializeInEditor</code></td><td><code class="en">UMG</code> 扩展</td><td>扩展类在编辑器内也能正确初始化（此前只支持运行时）</td><td>编辑器工具 <code class="en">UI</code>、扩展组件</td></tr>
+        <tr><td><code class="en">MetaHuman Live Link</code> 蓝图接口</td><td><code class="en">MetaHuman</code></td><td>实时动捕数据可直接经 <code class="en">Blueprint Interface</code> 访问（官方提供示例图）</td><td>程序化驱动 <code class="en">MetaHuman</code>、动捕接入</td></tr>
+        <tr><td><code class="en">Geometry Collection Reset State</code></td><td><code class="en">Chaos</code> 破坏</td><td>用 <code class="en">C</code>++ / 蓝图在运行中重置破碎体状态；另支持导出破碎体为骨骼网格</td><td>可恢复的破坏物、关卡重置</td></tr>
+        <tr><td><code class="en">ChaosActorManager</code> 观察组件函数</td><td><code class="en">Chaos</code> 缓存</td><td>蓝图函数 add / <code class="en">update</code> / <code class="en">remove</code> / <code class="en">clear</code> 观察组件</td><td>动态控制缓存回放</td></tr>
+        <tr><td><code class="en">AnimSequencerExport</code> 蓝图类型</td><td>动画</td><td>动画序列导出结果暴露为蓝图类型</td><td>动画批处理工具</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>结论：5.7 的蓝图增量大头集中在工具链 / 虚拟制作 / 动画系统，对常规玩法开发影响有限；写通用游戏逻辑时，以第十六章 + 17.3 的常用组合链为重点。</p>
+
+    <h3 id="s52" class="hd lv3">17.3 高频节点组合链实战（核心：<code class="en">A</code> 接 <code class="en">B</code> 接 <code class="en">C</code> 的用途）</h3>
+
+    <p>每条格式：节点链 → 为什么这么接 → 实战场景。节点名可在编辑器右键搜索。</p>
+
+    <h4 id="s53" class="hd lv4">17.3.1 初始化与生命周期</h4>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点链</th><th>为什么这么接</th><th>实战场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Event BeginPlay</code> → <code class="en">Set Health</code> / 调用 <code class="en">Init</code> 函数</td><td><code class="en">BeginPlay</code> 是每个 <code class="en">Actor</code> 进世界的统一入口，先赋初值再跑逻辑</td><td>角色出生时血量 = 100、加载存档</td></tr>
+        <tr><td><code class="en">Event BeginPlay</code> → <code class="en">Delay</code>(0.1) → 调目标函数</td><td>等一帧 / 等依赖对象生成完再操作，避免引用还是空的</td><td>生成物列表刷新、开场先播音乐再出字幕</td></tr>
+        <tr><td><code class="en">Event BeginPlay</code> → <code class="en">Spawn Actor from Class</code> → <code class="en">Set</code>（存变量）</td><td>生成后把引用存变量，后续 <code class="en">Tick</code> / 事件才能操作它</td><td>生成 <code class="en">Boss</code> 后保留引用，供血条 / 追击逻辑用</td></tr>
+        <tr><td><code class="en">Construction Script</code> → <code class="en">Set Actor Location</code> / <code class="en">Material</code></td><td>构造脚本在编辑器里摆放 <code class="en">Actor</code> 时就执行，用于摆放态调整</td><td>程序化摆放路灯间距、按参数改颜色</td></tr>
+        <tr><td><code class="en">Event Destroyed</code> / <code class="en">EndPlay</code> → 调用 <code class="en">Event Dispatcher</code></td><td>死亡 / 销毁时广播，让监听方（<code class="en">UI</code>、任务系统）收尾</td><td>敌人死亡 → 任务计数 + 1、播结算 <code class="en">UI</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 id="s54" class="hd lv4">17.3.2 输入 → 移动（<code class="en">Enhanced Input</code>）</h4>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点链</th><th>为什么这么接</th><th>实战场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">IA_Move</code> 输入事件（<code class="en">Axis2D</code>）→ <code class="en">Add Movement Input</code></td><td><code class="en">Input Action</code> 事件输出轴向值，喂给移动组件做相对相机方向的位移</td><td><code class="en">WASD</code> / 摇杆移动</td></tr>
+        <tr><td><code class="en">IA_Jump</code> 输入事件（<code class="en">Started</code>）→ <code class="en">Jump</code></td><td>用 <code class="en">Started</code> 触发一次性动作（跳跃只触发一次，不能每帧加）</td><td>跳跃</td></tr>
+        <tr><td><code class="en">IA_Look</code> 输入事件（<code class="en">Axis2D</code>）→ <code class="en">Add Controller Yaw</code> / <code class="en">Pitch Input</code></td><td>把鼠标 / 右摇杆的 2<code class="en">D</code> 值拆成相机偏航 / 俯仰</td><td>第一 / 第三人称视角</td></tr>
+        <tr><td><code class="en">IA_Run</code>（<code class="en">Started</code>）→ <code class="en">Set</code> 变量 → <code class="en">Tick</code> 里 <code class="en">Branch</code>(变量)</td><td>按键只改状态，消耗状态在 <code class="en">Tick</code> 里读——输入事件 ≠ 每帧执行</td><td>按住 <code class="en">Shift</code> 跑步</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 id="s55" class="hd lv4">17.3.3 碰撞与命中</h4>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点链</th><th>为什么这么接</th><th>实战场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">OnComponentHit</code> → <code class="en">Cast To</code> 目标类 → 调 <code class="en">TakeDamage</code> / <code class="en">Set Health</code></td><td><code class="en">Hit</code> 只告诉你撞上了谁（<code class="en">Other Actor</code>），必须先 <code class="en">Cast</code> 成具体类才能读属性 / 调函数</td><td>子弹打中敌人扣血</td></tr>
+        <tr><td><code class="en">OnComponentBeginOverlap</code> → <code class="en">Cast To PlayerCharacter</code> → <code class="en">Destroy</code>(自身)</td><td><code class="en">Overlap</code> 事件 + <code class="en">Cast</code> 过滤「只有玩家碰到才响应」，再销毁自己</td><td>拾取金币 / 弹药，碰到的不是玩家就忽略</td></tr>
+        <tr><td><code class="en">Event Hit</code> → <code class="en">Get Hit Location</code> → <code class="en">Spawn Niagara at Location</code></td><td>命中点坐标直接喂给粒子 / 音效生成节点</td><td>子弹着弹火花、落地尘土</td></tr>
+        <tr><td><code class="en">LineTraceByChannel</code> → <code class="en">Branch</code>(<code class="en">BlockingHit</code>) → 命中逻辑</td><td>射线返回命中结果，先判是否打中再决定分支，避免空引用</td><td>枪械检测、视线遮挡、脚底落点检测</td></tr>
+        <tr><td><code class="en">SphereOverlapActors</code> → <code class="en">ForEachLoop</code> → 逐个处理</td><td>范围查询返回 <code class="en">Actor</code> 数组，用 <code class="en">ForEach</code> 遍历处理</td><td>手雷炸范围内的所有敌人</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 id="s56" class="hd lv4">17.3.4 位置 / 朝向 / 距离</h4>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点链</th><th>为什么这么接</th><th>实战场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Get Actor Location</code>(自身) → <code class="en">Vector Distance</code>(目标) → <code class="en">Branch</code>(&lt; 10)</td><td>距离节点输出数值，接 <code class="en">Branch</code> 做区间判断</td><td>敌人进入 10 米才开始追击</td></tr>
+        <tr><td><code class="en">Get Actor Forward Vector</code> → <code class="en">Multiply</code>(速度) → <code class="en">Add Actor Location</code></td><td>朝前向量 × 速度得到每步位移，加上当前位置</td><td>无 <code class="en">CharacterMovement</code> 的简单物体直线前进</td></tr>
+        <tr><td><code class="en">Find Look at Rotation</code>(目标) → <code class="en">Set Actor Rotation</code></td><td>一步算出「看目标」的旋转并应用</td><td>炮塔转向玩家、<code class="en">NPC</code> 面向说话者</td></tr>
+        <tr><td><code class="en">Get Player Character</code> → <code class="en">Cast To</code> 子类 → 读属性</td><td>先取玩家再转成具体类，才能访问子类专属变量</td><td>读玩家金钱做商店 <code class="en">UI</code></td></tr>
+        <tr><td><code class="en">Get All Actors of Class</code> → <code class="en">ForEachLoop</code> → 操作</td><td>全场景找同类 <code class="en">Actor</code> 批量操作</td><td>一键关掉所有灯、重置所有敌人</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 id="s57" class="hd lv4">17.3.5 计时与平滑过渡</h4>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点链</th><th>为什么这么接</th><th>实战场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Event Tick</code> → <code class="en">FInterp To</code>(目标值) → <code class="en">Set</code> 变量</td><td><code class="en">FInterp</code> 按帧逼近目标值，数值平滑变化且速度自适应</td><td>血量条平滑下降、相机 <code class="en">FOV</code> 渐变</td></tr>
+        <tr><td><code class="en">Event Tick</code> → <code class="en">Get Delta Seconds</code> → <code class="en">Add Actor Location</code></td><td>用 <code class="en">Delta Seconds</code> 乘速度，保证不同帧率下移动速度一致</td><td>匀速漂移的平台、飞弹</td></tr>
+        <tr><td><code class="en">VInterp To</code> → <code class="en">Set Actor Location</code></td><td>向量插值做位置平滑</td><td>摄像机跟随、弹簧平滑</td></tr>
+        <tr><td><code class="en">Event</code> → <code class="en">Retriggerable Delay</code>(2) → 冷却结束逻辑</td><td>每次触发都重置计时，松手才算数</td><td>蓄力进度条、无操作 2 秒自动退出</td></tr>
+        <tr><td><code class="en">Timeline</code> → 更新引脚 → <code class="en">Set Actor Location</code> / <code class="en">Opacity</code></td><td><code class="en">Timeline</code> 沿曲线输出值，可驱动任意随时间变化的输入</td><td>开门动画曲线、淡入淡出</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 id="s58" class="hd lv4">17.3.6 流程控制组合</h4>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点链</th><th>为什么这么接</th><th>实战场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Branch</code>(<code class="en">IsValid</code>(引用)) → <code class="en">True</code>: 正常逻辑 / <code class="en">False</code>: <code class="en">Print</code></td><td>先判空再使用引用，是防崩溃的头号习惯</td><td>调外部对象函数前先 <code class="en">IsValid</code></td></tr>
+        <tr><td><code class="en">DoOnce</code>(<code class="en">Completed</code>) → 只跑一次逻辑 → 后续 <code class="en">Reset</code></td><td>用 <code class="en">DoOnce</code> 挡重复触发，<code class="en">Reset</code> 引脚由另一事件重新解锁</td><td>一次性奖励、任务里程碑</td></tr>
+        <tr><td><code class="en">Gate</code>(<code class="en">Enter</code> + <code class="en">Open</code> / <code class="en">Close</code> / <code class="en">Toggle</code>)</td><td><code class="en">Gate</code> 是「可被外部开关的执行闸门」</td><td>双触发器：<code class="en">A</code> 打开闸门、<code class="en">B</code> 关闭闸门</td></tr>
+        <tr><td><code class="en">Sequence</code>(<code class="en">Out0</code> / <code class="en">Out1</code>) → 并行多路</td><td>一个事件同时触发多条互不依赖的逻辑</td><td>拾取时同时播放音效 + 加分 + 播特效</td></tr>
+        <tr><td><code class="en">Switch on Enum</code>(状态) → 各状态分支</td><td>按枚举分发执行流，比多个 <code class="en">Branch</code> 清晰</td><td>角色状态机 <code class="en">Idle</code> / <code class="en">Walk</code> / <code class="en">Run</code> / <code class="en">Dead</code></td></tr>
+        <tr><td><code class="en">FlipFlop</code>(<code class="en">A</code> / <code class="en">B</code>) → 交替逻辑</td><td>每次触发在 <code class="en">A</code>、<code class="en">B</code> 间切换</td><td>单键开关灯、蹲下 / 站起</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 id="s59" class="hd lv4">17.3.7 蓝图通信（官方推荐模式，来源：<code class="en">Blueprint Communication Usage</code>）</h4>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点链</th><th>为什么这么接</th><th>实战场景</th></tr></thead>
+        <tbody>
+        <tr><td>直接引用：开关 <code class="en">Event</code> → <code class="en">Set</code> 门 <code class="en">Actor</code> 引用 → 调开门函数</td><td>一对一的明确指向，最直接</td><td>场景中一个开关开一扇指定的门 / 亮一盏灯</td></tr>
+        <tr><td><code class="en">Event Dispatcher</code>：定义 <code class="en">OnDied</code> → 触发点 <code class="en">Call</code> → 其他蓝图 <code class="en">Bind</code> → 各自响应</td><td>一对多广播，监听方互不依赖、各自反应</td><td><code class="en">Boss</code> 死亡广播：角色庆祝 + 门打开 + <code class="en">HUD</code> 弹提示</td></tr>
+        <tr><td><code class="en">Blueprint Interface</code>：定义 <code class="en">TakeWeaponFire</code> → 车 / 树都实现 → 开火处统一调用</td><td>把「都怕被打」的共同能力抽象成契约，调用方不用知道具体类</td><td>树烧毁、雪人融化，但墙不实现接口所以不受影响</td></tr>
+        <tr><td><code class="en">Cast To</code>：<code class="en">Get Player Character</code> → <code class="en">Cast To</code> 飞行角色 → 调飞行函数</td><td>需要访问子类专属功能时才 <code class="en">Cast</code>；<code class="en">Cast</code> 失败说明不是这个类</td><td>玩家进火场 <code class="en">Cast</code> 读血量扣血；死亡 <code class="en">Cast GameMode</code> 调重生脚本</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 id="s60" class="hd lv4">17.3.8 <code class="en">UI</code>（<code class="en">UMG</code>）</h4>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点链</th><th>为什么这么接</th><th>实战场景</th></tr></thead>
+        <tbody>
+        <tr><td>按钮 <code class="en">OnClicked</code> → <code class="en">Create Widget</code> → <code class="en">Add to Viewport</code></td><td>点击按钮才创建并显示目标 <code class="en">Widget</code></td><td>主菜单点「开始」弹确认框</td></tr>
+        <tr><td>血量变化 → 调 <code class="en">Widget</code> 内函数 → <code class="en">Set Percent</code></td><td>数据变化主动推给 <code class="en">UI</code> 更新，避免 <code class="en">UI</code> 每帧轮询</td><td>血条、技能冷却</td></tr>
+        <tr><td><code class="en">Event Dispatcher</code>(死亡) → <code class="en">Level Blueprint</code> → <code class="en">Create Widget</code>(游戏结束)</td><td>用事件驱动 <code class="en">UI</code> 出现，<code class="en">UI</code> 蓝图中不需要知道角色细节</td><td>死亡结算界面</td></tr>
+        <tr><td><code class="en">Timeline</code> → <code class="en">Set Render Opacity</code> → 淡入淡出</td><td>用曲线驱动透明度实现过渡</td><td>受伤闪红、场景切换渐隐</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 id="s61" class="hd lv4">17.3.9 动画</h4>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点链</th><th>为什么这么接</th><th>实战场景</th></tr></thead>
+        <tbody>
+        <tr><td>输入事件 → <code class="en">Play Montage</code>(攻击) → <code class="en">OnNotify</code>(命中帧) → 伤害逻辑</td><td>蒙太奇的 <code class="en">Notify</code> 在动画特定帧发通知，把伤害对齐到动画节奏</td><td>近战攻击：刀挥到一半才判定伤害</td></tr>
+        <tr><td><code class="en">AnimNotify</code> → 调用蓝图事件 → 脚步音效 / 粒子</td><td><code class="en">Notify</code> 作为动画向蓝图传信号的通道</td><td>每步踩出灰尘、挥拳音效</td></tr>
+        <tr><td>动画蓝图状态机 + 混合空间，速度变量 → 混合</td><td>动画蓝图中用速度 / 朝向驱动混合，实现走路 / 奔跑过渡</td><td>第三人称移动动画</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 id="s62" class="hd lv4">17.3.10 <code class="en">AI</code></h4>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点链</th><th>为什么这么接</th><th>实战场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">AIPerception</code> 事件 → 写 <code class="en">Blackboard</code> 变量 → 行为树分支读取</td><td>感知结果进黑板，行为树只看黑板——感知与决策解耦</td><td>发现玩家 → 黑板 <code class="en">IsPlayerSeen</code> = true → 行为树切攻击</td></tr>
+        <tr><td><code class="en">Get Random Reachable Point in Radius</code> → <code class="en">MoveTo Location</code></td><td>先取导航网络内随机可达点，再寻路过去</td><td>巡逻：每 5 秒换一个随机巡逻点</td></tr>
+        <tr><td><code class="en">Get All Actors of Class</code>(敌人) → <code class="en">ForEach</code> → <code class="en">Get Distance</code> → 找最近</td><td>遍历 + 距离比较求最近目标</td><td>小怪锁定离自己最近的玩家</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 id="s63" class="hd lv4">17.3.11 网络 / 多人</h4>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点链</th><th>为什么这么接</th><th>实战场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">HasAuthority</code> → <code class="en">Branch</code> → 只在服务器执行逻辑</td><td>权威判断保证「谁说了算」，防客户端作弊 / 不同步</td><td>伤害结算、生成掉落物只在服务器做</td></tr>
+        <tr><td>客户端输入 → <code class="en">Server RPC</code>(开火) → <code class="en">Multicast</code>(特效)</td><td>客户端发请求，服务器裁决伤害，<code class="en">Multicast</code> 让所有人看到特效</td><td>射击：命中判定在服务器，火花人人可见</td></tr>
+        <tr><td><code class="en">Is Locally Controlled</code> → <code class="en">Branch</code> → 只操作自己的相机 / 输入</td><td>模拟代理（别人的角色）不需要跑本地输入逻辑</td><td>别人角色不渲染第一人称手臂</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s64" class="hd lv3">17.4 常见「接法误区」（防坑）</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>误区</th><th>问题</th><th>正确做法</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Event Tick</code> → <code class="en">Delay</code></td><td><code class="en">Tick</code> 每帧触发，<code class="en">Delay</code> 期间重复调用会被忽略，计时失效</td><td>用 <code class="en">RetriggerableDelay</code>，或变量倒计时：<code class="en">Tick</code> → 变量 -= <code class="en">Delta</code> → <code class="en">Branch</code>(&lt;= 0)</td></tr>
+        <tr><td>用 <code class="en">ForEachLoop</code> 遍历几千个对象</td><td>循环在帧间迭代，大循环卡顿且逻辑像「异步」</td><td>数据量小才用蓝图循环；大批量改用 <code class="en">C</code>++ / 数组函数合并</td></tr>
+        <tr><td><code class="en">Cast</code> 失败分支不处理</td><td><code class="en">Cast</code> 失败返回 null，接着用必然崩溃</td><td><code class="en">Cast To</code> → <code class="en">Branch</code>(<code class="en">IsValid</code>)，或 <code class="en">Cast</code> 自带失败引脚接 <code class="en">Print</code> / 跳过</td></tr>
+        <tr><td>在 <code class="en">Tick</code> 里 <code class="en">Get All Actors of Class</code></td><td>全场景搜索非常昂贵</td><td>提前在 <code class="en">BeginPlay</code> 缓存引用数组，或改事件驱动</td></tr>
+        <tr><td>把数据线当执行线用</td><td>彩线不触发节点执行，连了等于没连</td><td>记住：执行靠白线，彩线只传值</td></tr>
+        <tr><td>每个事件都接 <code class="en">Print String</code> 不删</td><td>发布版本残留调试输出</td><td>调试完移除，或包进仅开发构建生效的自定义函数</td></tr>
+        <tr><td><code class="en">Switch on Int</code> 无 <code class="en">Default</code> 兜底</td><td>没匹配到时静默无事发生，难排查</td><td>总是留 <code class="en">Default</code> 分支并打日志</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s65" class="hd lv3">17.5 官方与社区学习资源</h3>
+
+    <p>官方文档（新版站点已把 5.0 ~ 5.8 版本合并到一个页面，必须带 <code class="en">application_version</code>=5.7 参数才是 5.7 内容）：</p>
+
+    <ul class="bullets">
+      <li><code class="en">UE</code> 5.7 <code class="en">Release Notes</code>：dev.<code class="en">epicgames</code>.com/<code class="en">documentation</code>/<code class="en">unreal</code>-<code class="en">engine</code>/<code class="en">unreal</code>-<code class="en">engine</code>-5-7-<code class="en">release</code>-<code class="en">notes</code>?<code class="en">application_version</code>=5.7</li>
+      <li><code class="en">Blueprint</code> 总览：dev.<code class="en">epicgames</code>.com/<code class="en">documentation</code>/<code class="en">unreal</code>-<code class="en">engine</code>/<code class="en">blueprints</code>-<code class="en">visual</code>-<code class="en">scripting</code>-in-<code class="en">unreal</code>-<code class="en">engine</code>?<code class="en">application_version</code>=5.7</li>
+      <li><code class="en">Nodes</code>（引脚 / 连线 / 折叠图机制）：dev.<code class="en">epicgames</code>.com/<code class="en">documentation</code>/<code class="en">unreal</code>-<code class="en">engine</code>/<code class="en">nodes</code>-in-<code class="en">unreal</code>-<code class="en">engine</code>?<code class="en">application_version</code>=5.7</li>
+      <li><code class="en">Blueprint Communication Usage</code>（通信方式选择）：dev.<code class="en">epicgames</code>.com/<code class="en">documentation</code>/<code class="en">unreal</code>-<code class="en">engine</code>/<code class="en">blueprint</code>-<code class="en">communication</code>-<code class="en">usage</code>-in-<code class="en">unreal</code>-<code class="en">engine</code>?<code class="en">application_version</code>=5.7</li>
+      <li><code class="en">Blueprint API Reference</code>（全节点函数字典）：dev.<code class="en">epicgames</code>.com/<code class="en">documentation</code>/<code class="en">unreal</code>-<code class="en">engine</code>/<code class="en">BlueprintAPI</code>?<code class="en">application_version</code>=5.7</li>
+      <li><code class="en">Blueprint Node Reference</code>（节点参考）：dev.<code class="en">epicgames</code>.com/<code class="en">documentation</code>/<code class="en">unreal</code>-<code class="en">engine</code>/node-<code class="en">reference</code>?<code class="en">application_version</code>=5.7</li>
+    </ul>
+
+    <p>官方示例：新项目模板自带的 <code class="en">First Person</code> / <code class="en">Third Person</code> / <code class="en">Top Down</code> 蓝图（输入 → 移动 → 动画是最标准的组合链范本）；官方 <code class="en">Content Examples</code> 项目。</p>
+
+    <p>社区参考：<code class="en">CSDN</code>《<code class="en">UE5</code> 蓝图节点图文大全（300 + 蓝图）》（中英节点对照）；知乎《<code class="en">UE5</code> 蓝图学习笔记（自用备忘）》《<code class="en">UE5</code> 蓝图节点作用和用法指南》；<code class="en">B</code> 站《<code class="en">UE5</code> 蓝图逻辑构建 - 节点连接 / 变量控制 / 事件触发》系列；官方 <code class="en">Developer Forums</code> / <code class="en">Learning Library</code> 搜索具体节点名可找到大量实战问答。</p>
+
+    <h2 id="s66" class="hd lv2">附录：使用技巧</h2>
+
+    <ul class="bullets">
+      <li>搜索节点：蓝图编辑器右键空白处，直接输入英文节点名（如 <code class="en">ForEachLoop</code>）。</li>
+      <li>变量 <code class="en">Get</code> / <code class="en">Set</code>：<code class="en">Ctrl</code> + 拖拽变量到图 = <code class="en">Get</code>，<code class="en">Alt</code> + 拖拽 = <code class="en">Set</code>。</li>
+      <li>事件绑定：右键组件 → <code class="en">Add Event</code> 可快速生成组件事件（<code class="en">OnClicked</code>、<code class="en">OnComponentHit</code> 等）。</li>
+      <li>调试：<code class="en">Print String</code> 打印文本、<code class="en">Draw Debug Line</code> 画线，均在节点搜索里输入即可。</li>
+      <li>性能注意：<code class="en">ForLoop</code> / <code class="en">WhileLoop</code> 在帧间迭代，超大循环慎用；<code class="en">Tick</code> 每帧执行，逻辑要轻量。</li>
+    </ul>
+
+    <h2 id="s67" class="hd lv2">十八、社区检索查漏补缺补充节点（<code class="en">CSDN</code> / 知乎 / <code class="en">B</code> 站 / <code class="en">Epic</code> 官方交叉核对）</h2>
+
+    <p>定位：本章为对前十七章的查漏补缺，节点来源为社区高频教程（<code class="en">CSDN</code>《<code class="en">UE5</code> 蓝图节点图文大全（300+ 蓝图）》、知乎《<code class="en">UE5</code> 蓝图学习笔记（自用备忘）》《<code class="en">UE5</code> 蓝图节点作用和用法指南》、<code class="en">B</code> 站《<code class="en">UE5</code> 节点大全》系列），并逐一与 <code class="en">Epic</code> 官方 <code class="en">Blueprint API</code>（5.7）目录及官方 <code class="en">Developer Forums</code> 交叉核实；凡是无法在官方 <code class="en">API</code> 中确认的节点一律标注「存疑」或未收录。表格格式与前文一致：节点 | 作用 | 场景。</p>
+
+    <h3 id="s68" class="hd lv3">18.1 定时器体系（官方 <code class="en">GameplayStatics</code>，正文只覆盖了 <code class="en">Delay</code>）</h3>
+
+    <p>正文第五章只有 <code class="en">Delay</code> / <code class="en">RetriggerableDelay</code> 两种「延时」，缺定时器句柄（<code class="en">Timer Handle</code>）管理。下列节点来自官方 <code class="en">API</code> 的 <code class="en">Utilities</code> → <code class="en">Time</code> 分类，社区教程（知乎《用法指南》）均有讲解。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Set Timer by Event</code>（按事件设置定时器）</td><td>设置定时器：到指定秒数后触发指定自定义事件；可循环（<code class="en">Looping</code>）、可立即开始（<code class="en">Initial Start</code>）。返回 <code class="en">Timer Handle</code> 句柄用于后续管理</td><td>技能冷却倒计时、延时刷新、周期性刷怪</td></tr>
+        <tr><td><code class="en">Clear Timer</code>（清除定时器）</td><td>按句柄清除指定定时器，停止计时与触发</td><td>冷却结束提前打断、清除过期定时器</td></tr>
+        <tr><td><code class="en">Clear and Invalidate Timer</code>（清除并使句柄失效）</td><td>清除定时器并同时把句柄置空，避免残留句柄误用</td><td>角色销毁 / 关卡切换时统一清理</td></tr>
+        <tr><td><code class="en">Is Timer Active</code>（定时器是否活跃）</td><td>查询句柄对应的定时器是否仍在运行（返回 bool）</td><td>防重复启动：同一定时器在跑就不重启</td></tr>
+        <tr><td><code class="en">Set Timer by Function Name</code>（按函数名设置定时器）</td><td>同 <code class="en">Set Timer by Event</code>，但目标是指定函数名（<code class="en">String</code>），适合动态决定调用哪个函数</td><td>数据驱动的定时任务</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>注意：<code class="en">Timer Handle</code> 是值类型，把 <code class="en">Set Timer</code> 的返回值存成变量后再传给 <code class="en">Clear Timer</code>，是最标准的「启动—停止」组合链。</p>
+
+    <h3 id="s69" class="hd lv3">18.2 输入模式切换（<code class="en">PlayerController</code> 标准函数，<code class="en">UMG</code> 章节缺口）</h3>
+
+    <p>正文第十章 <code class="en">UMG</code> 只讲了控件的创建与显隐，没讲打开 / 关闭 <code class="en">UI</code> 时鼠标与输入的交接。这组节点是 <code class="en">UI</code> 交互的必备衔接（知乎《用法指南》「输入 -&gt; 输入模式」分组）。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Set Input Mode Game Only</code>（仅游戏输入）</td><td>隐藏鼠标光标，输入全部交给游戏（<code class="en">Pawn</code> / 摄像机）</td><td>关闭菜单、开始游玩、对话框结束后</td></tr>
+        <tr><td><code class="en">Set Input Mode UI Only</code>（仅 <code class="en">UI</code> 输入）</td><td>显示鼠标光标，输入全部交给 <code class="en">UI</code>，游戏不响应；可指定 <code class="en">Widget To Focus</code> 聚焦控件</td><td>打开背包、暂停菜单、商店界面</td></tr>
+        <tr><td><code class="en">Set Input Mode Game and UI</code>（游戏与 <code class="en">UI</code> 混合）</td><td>鼠标可见，游戏与 <code class="en">UI</code> 都能接收输入</td><td><code class="en">HUD</code> 常驻 + 可点击的半屏 <code class="en">UI</code>、聊天框</td></tr>
+        <tr><td><code class="en">Set Input Mode</code>（通用版）</td><td>通用版本，通过 <code class="en">In UI Mode</code> / <code class="en">In Game Mode</code> 两个布尔灵活组合</td><td>动态切换输入接管方式</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>推荐组合链：打开菜单 → <code class="en">Set Input Mode UI Only</code>（锁游戏输入）；关闭菜单 → <code class="en">Set Input Mode Game Only</code>（还给游戏）。</p>
+
+    <h3 id="s70" class="hd lv3">18.3 <code class="en">Pawn</code> 控制权切换（<code class="en">Controller</code> / <code class="en">Pawn</code>）</h3>
+
+    <p>正文第十四章只覆盖了网络 <code class="en">RPC</code>，缺「谁控制谁」这一层。下列节点来自官方 <code class="en">Controller</code> / <code class="en">Pawn</code> 分类（知乎《用法指南》「角色与控制器」分组）。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Possess</code>（接管）</td><td>让指定 <code class="en">Controller</code> 控制一个 <code class="en">Pawn</code>（接管后该 <code class="en">Pawn</code> 由该控制器驱动）</td><td>角色切换、复活后重新接管、进入载具</td></tr>
+        <tr><td><code class="en">UnPossess</code>（放弃）</td><td>断开 <code class="en">Controller</code> 与当前 <code class="en">Pawn</code> 的控制连接</td><td>角色死亡、下车、控制权移交</td></tr>
+        <tr><td><code class="en">Detach from Controller Pending Destroy</code>（销毁前断开）</td><td>从 <code class="en">Pawn</code> 侧主动断开控制器，通常在销毁 <code class="en">Pawn</code> 前调用</td><td>清理时避免悬空引用</td></tr>
+        <tr><td><code class="en">Is Local Player Controller</code>（是否本地玩家控制器）</td><td>判断控制器是否属于本地玩家（区别于远端 / <code class="en">AI</code>）</td><td>多人中只处理本地玩家输入</td></tr>
+        <tr><td><code class="en">Enable Input</code>（启用输入）</td><td>让默认不收输入的 <code class="en">Actor</code>（非 <code class="en">PlayerController</code>）也能响应输入事件</td><td>自定义 <code class="en">Actor</code> 用键盘控制移动</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s71" class="hd lv3">18.4 材质参数动态控制（<code class="en">Material Instance Dynamic API</code>）</h3>
+
+    <p>正文第十一章提了 <code class="en">Create Dynamic Material Instance</code>（<code class="en">MID</code>），但没写怎么改里面的参数。这两个节点是 <code class="en">MID</code> 的配套（知乎《用法指南》「渲染 -&gt; 材质参数」分组，官方 <code class="en">Material</code> 分类）。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Set Material Parameter Scalar</code>（设标量参数）</td><td>修改 <code class="en">MID</code> 中的浮点 / 标量参数（<code class="en">Parameter Name</code> 需与材质资产内定义一致）</td><td>溶解进度、血条填充、受击闪白强度</td></tr>
+        <tr><td><code class="en">Set Material Parameter Vector</code>（设向量参数）</td><td>修改 <code class="en">MID</code> 中的颜色 / 向量参数（常为 <code class="en">Emissive</code>、<code class="en">Base Color</code>）</td><td>受击变红、装备染色、队伍颜色区分</td></tr>
+        <tr><td><code class="en">Set Texture Parameter Value</code>（设纹理参数）</td><td>运行时替换材质中的贴图参数</td><td>皮肤更换、屏幕投影</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>关键点：<code class="en">Parameter Name</code> 必须和材质资产里参数的命名完全一致，否则静默无效；先 <code class="en">Create Dynamic Material Instance</code> 再 <code class="en">Set</code>，避免直接改资产。</p>
+
+    <h3 id="s72" class="hd lv3">18.5 <code class="en">UMG</code> 控件动画（<code class="en">Widget Animation</code>，<code class="en">UMG</code> 章节缺口）</h3>
+
+    <p>正文第十章没讲控件动画。这组节点用于播放控件蓝图里的 <code class="en">Widget Animation</code>（知乎《用法指南》「用户界面 -&gt; 动画」分组，官方 <code class="en">UMG</code> 分类）。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Play Animation</code>（播放动画）</td><td>播放指定 <code class="en">Widget Animation</code>；可设起始时间 / 循环次数 / 播放模式（<code class="en">Forward</code> / <code class="en">Reverse</code> / <code class="en">Ping Pong</code>）与速度</td><td>打开面板弹入动画、<code class="en">HUD</code> 刷新动效</td></tr>
+        <tr><td><code class="en">Play Animation To</code>（播放到指定时间）</td><td>同 <code class="en">Play Animation</code>，但多一个 <code class="en">End Time</code> 限制播放区间</td><td>只播动画前 0.5 秒的提示段</td></tr>
+        <tr><td><code class="en">Stop Animation</code>（停止动画）</td><td>停止指定动画（不可从原位置恢复）</td><td>打断过场、立即定格</td></tr>
+        <tr><td><code class="en">Pause Animation</code>（暂停动画）</td><td>暂停指定动画，返回当前播放时间（秒），可从该位置继续</td><td>暂停后从原处续播</td></tr>
+        <tr><td><code class="en">Reverse Animation</code>（反向播放）</td><td>从当前位置反向播放指定动画</td><td>关闭面板时反向收回</td></tr>
+        <tr><td><code class="en">Set Num Loops to Play</code>（设循环次数）</td><td>动态设置动画循环次数（0 为无限循环）</td><td>无限旋转 <code class="en">loading</code> 图标</td></tr>
+        <tr><td><code class="en">Is Animation Playing</code> / <code class="en">Is Playing Animation</code>（动画播放判断）</td><td>判断指定动画 / 任一动画是否正在播放（返回 bool）</td><td>防重复触发动画</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s73" class="hd lv3">18.6 数组补充节点</h3>
+
+    <p>正文第五章数组表已较全，比对知乎《用法指南》后缺一个高频去重节点。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Remove Duplicates</code>（去重）</td><td>移除数组中重复元素，保留首次出现并保持原顺序，返回新数组</td><td>掉落列表去重、任务奖励合并</td></tr>
+        <tr><td><code class="en">Random Array Item</code>（随机元素）</td><td>从数组中随机取一个元素（正文第五章已有，社区高频再确认）</td><td>随机奖励、随机台词</td></tr>
+        <tr><td><code class="en">Array</code> → <code class="en">Is Empty</code> / <code class="en">Get</code> (copy) 等（再确认）</td><td>正文已覆盖，社区用法一致，无新增</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s74" class="hd lv3">18.7 关卡流送（<code class="en">Level Streaming</code>，正文完全缺失）</h3>
+
+    <p><code class="en">CSDN</code>《300+ 蓝图》目录中有「关卡流送（<code class="en">Level Streaming</code>）」分类，官方 <code class="en">Blueprint API</code> 目录同样确认存在该分类，而正文未覆盖，属明显缺口。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Load Stream Level</code>（加载流送关卡）</td><td>按名称异步加载一个关卡流送（<code class="en">Level Streaming</code>）子关卡</td><td>进入某区域加载室内场景、无缝大地图分区</td></tr>
+        <tr><td><code class="en">Unload Stream Level</code>（卸载流送关卡）</td><td>按名称卸载已加载的子关卡，释放内存</td><td>离开区域卸载室内、按视野剔除</td></tr>
+        <tr><td><code class="en">Is Level Loaded</code>（关卡是否已加载）</td><td>查询指定流送关卡当前是否已加载（返回 bool）</td><td>加载完成后再放玩家进入</td></tr>
+        <tr><td><code class="en">Get Streamed Levels</code>（获取流送关卡）</td><td>获取关卡蓝图拥有的所有流送关卡引用数组</td><td>批量管理子关卡</td></tr>
+        <tr><td><code class="en">Level</code> 相关事件（<code class="en">On Level Loaded</code> / <code class="en">Unloaded</code>）</td><td>关卡加载 / 卸载完成后触发的事件</td><td>加载完再初始化子关卡内逻辑</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>用途提示：大地图无缝衔接、<code class="en">Boss</code> 房独立加载、内存优化（大型开放世界常用）。</p>
+
+    <h3 id="s75" class="hd lv3">18.8 保存 / 读取游戏（<code class="en">Save Game</code>，正文只在 5.7 增量提了一个异步函数）</h3>
+
+    <p>官方 <code class="en">Blueprint API</code> 有独立 <code class="en">SaveGame</code> 分类，正文仅在 16.x 提了 5.7 新增的 <code class="en">LoadGameIfExistsAsync</code>，缺完整体系（<code class="en">CSDN</code> 目录也有「保存游戏」分类）。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Create Save Game Object</code>（创建存档对象）</td><td>new 一个指定 <code class="en">SaveGame</code> 子类的实例，用于暂存要保存的数据</td><td>新建存档数据包（血量 + 位置 + 背包）</td></tr>
+        <tr><td><code class="en">Save Game to Slot</code>（保存到槽位）</td><td>把 <code class="en">SaveGame</code> 对象序列化写入指定槽位（返回 bool）</td><td>手动存档、自动存档</td></tr>
+        <tr><td><code class="en">Load Game from Slot</code>（从槽位加载）</td><td>从指定槽位读取 <code class="en">SaveGame</code> 对象（不存在返回空）</td><td>读档进入游戏</td></tr>
+        <tr><td><code class="en">Does Save Game Exist</code>（存档是否存在）</td><td>查询指定槽位是否有存档（返回 bool）</td><td>首次进游戏判断「继续游戏」按钮</td></tr>
+        <tr><td><code class="en">Delete Game in Slot</code>（删除存档）</td><td>删除指定槽位的存档文件</td><td>新游戏清档、删档功能</td></tr>
+        <tr><td><code class="en">Get Slot Names</code>（获取槽位名）</td><td>获取全部存档槽位名数组</td><td>存档列表界面</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>标准组合链：<code class="en">Save Game to Slot</code> 前先用 <code class="en">Create Save Game Object</code> 建对象并填数据；<code class="en">Load Game from Slot</code> 后用 <code class="en">Cast To</code> 转成具体存档子类才能读字段。5.7 的异步版本 <code class="en">LoadGameIfExistsAsync</code> 见第十六章。</p>
+
+    <h3 id="s76" class="hd lv3">18.9 宏（<code class="en">Macro</code>）与宏库（<code class="en">Macro Library</code>）</h3>
+
+    <p>知乎《<code class="en">UE5</code> 蓝图学习笔记（自用备忘）》第五十三、五十四节专题讲解，正文第十七章只提了 <code class="en">Collapse Nodes</code>（折叠图），未区分宏。三者概念相近但完全不同：</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>概念</th><th>与函数 / 折叠图的区别</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Macro</code>（宏）</td><td>把一段图「内联展开」到每个调用处：支持多个输入 / 输出执行引脚，展开后无函数调用开销；默认只能被定义它的蓝图使用</td><td>带多个出入口的小工具图（如「条件延迟」）</td></tr>
+        <tr><td><code class="en">Macro Library</code>（宏库）</td><td>专门存放宏的蓝图，宏可被其他蓝图调用；在宏库中按需添加输入 / 输出引脚</td><td>团队共享的通用宏库（判断年龄、求和校验）</td></tr>
+        <tr><td>（对比）函数 <code class="en">Function</code></td><td>单一执行入口 + 返回值，编译为一次调用，参数不内联</td><td>需要传参返回值的通用逻辑</td></tr>
+        <tr><td>（对比）折叠图 <code class="en">Collapse Nodes</code></td><td>仅把现有节点收进子图整理版面，不跨蓝图共享，无参数概念</td><td>整理当前图的可读性</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s77" class="hd lv3">18.10 调试与渲染判断补充</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Draw Debug Sphere</code>（绘制调试球体）</td><td>在世界中绘制临时球体（<code class="en">Center</code> / <code class="en">Radius</code> / <code class="en">Color</code> / <code class="en">Duration</code>），仅开发模式可见</td><td>可视化范围检测、爆炸半径、感知半径</td></tr>
+        <tr><td><code class="en">Draw Debug Box</code>（绘制调试盒体）</td><td>绘制临时盒体，可视化 <code class="en">Box Trace</code> 等形状检测范围</td><td>攻击判定范围调试</td></tr>
+        <tr><td><code class="en">Is Nanite Enabled</code>（<code class="en">Nanite</code> 是否启用）</td><td>查询指定 <code class="en">Static Mesh</code> 是否启用了 <code class="en">Nanite</code> 虚拟化几何体（返回 bool），<code class="en">UE5</code> 新增</td><td>运行时判断网格体渲染模式、性能分档</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="s78" class="hd lv3">18.11 存疑节点说明（经官方核对，未收录 / 标注存疑）</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点 / 分类</th><th>问题</th><th>处理</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Set Lumen Scene Lighting Quality</code>（知乎《用法指南》提到）</td><td>官方 <code class="en">Blueprint API</code> 目录中未检索到同名条目，无法核实节点存在</td><td>存疑，不写入正文；如需使用请先在编辑器搜索确认</td></tr>
+        <tr><td><code class="en">Field System Component</code> / <code class="en">Radial Force Component</code> / <code class="en">Decal Component</code>（<code class="en">CSDN</code> 目录分类）</td><td>属组件 / 分类名而非蓝图函数节点，且原文正文付费锁定，无法核实具体节点名</td><td>仅作分类提示，未收录具体节点</td></tr>
+        <tr><td><code class="en">B</code> 站《<code class="en">UE5</code> 节点大全》视频内节点清单</td><td>视频本体与字幕需登录，无法提取逐节点内容</td><td>仅确认视频主题覆盖「节点连接 / 变量控制 / 事件触发」，与正文第十七章一致</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>本章完。补充说明：以上所有「推荐补入」节点均已通过官方 <code class="en">Blueprint API</code> 5.7 目录（<code class="en">BlueprintAPI</code>）或官方分类页核实存在；存疑项已在 18.11 中明确标注，未做任何未经核实的写入。</p>
+
+    <h3 id="s79" class="hd lv3">18.12 数据表（<code class="en">Data Table</code>，正文完全缺失）</h3>
+
+    <p><code class="en">CSDN</code>《300+ 蓝图》目录与官方 <code class="en">Blueprint API</code> 均有独立 <code class="en">DataTable</code> 分类，正文未覆盖。数据表是「数据驱动」的核心：把数值 / 文案 / 配置放表里，蓝图按行名读取，改数不改逻辑。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Get Data Table Row</code>（获取数据表行）</td><td>按 <code class="en">Row Name</code> 从 <code class="en">Data Table</code> 取一行，输出 <code class="en">Struct</code>（表行结构与行类型一致）</td><td>读取武器属性、敌人数值、任务文本</td></tr>
+        <tr><td><code class="en">Get Data Table Row Names</code>（获取所有行名）</td><td>返回表中所有行名数组</td><td>遍历所有武器 <code class="en">ID</code>、生成图鉴列表</td></tr>
+        <tr><td><code class="en">Get Data Table Row as Struct</code> / <code class="en">Get Data Table Row as String</code>（按结构体 / 字符串取行）</td><td>以结构体或字符串形式取行（后者适合调试 / 日志）</td><td>调试打印表内容</td></tr>
+        <tr><td><code class="en">Does Data Table Row Exist</code>（行是否存在）</td><td>判断指定 <code class="en">Row Name</code> 是否存在（返回 bool），官方 5.7 确认存在</td><td>取行前判空防错</td></tr>
+        <tr><td><code class="en">Get Data Table Column Names</code>（获取列名）</td><td>返回表所有列名数组</td><td>动态生成表头 / 编辑器工具</td></tr>
+        <tr><td><code class="en">Evaluate Curve Table Row</code>（曲线表求值）</td><td>在 <code class="en">Curve Table</code> 行上按参数求值（官方确认）</td><td>按等级查成长曲线</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>推荐组合链：<code class="en">Get Data Table Row</code> 前先 <code class="en">Does Data Table Row Exist</code> 判断，避免取到空行；行的字段访问通过 <code class="en">Break Struct</code>（拆解结构体）节点。</p>
+
+    <h3 id="s80" class="hd lv3">18.13 游戏标签（<code class="en">Gameplay Tags</code>，正文完全缺失）</h3>
+
+    <p>官方 <code class="en">Blueprint API</code> 有独立 <code class="en">GameplayTags</code> 分类（30+ 函数）。标签 = 带命名空间的字符串（如 <code class="en">Damage</code>.<code class="en">Fire</code>），用于替代布尔开关的组合标记（官方文档《<code class="en">Gameplay Tags</code>》）。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Has Tag</code>（拥有标签）</td><td>判断标签容器是否包含单个标签（返回 bool）</td><td>判断敌人是否有 <code class="en">Fire</code> 免疫</td></tr>
+        <tr><td><code class="en">Has All Tags</code>（拥有全部标签）</td><td>容器是否包含列表中的全部标签</td><td>多条件解锁判定（有钥匙 + 有权限）</td></tr>
+        <tr><td><code class="en">Has Any Tags</code>（拥有任一标签）</td><td>容器是否包含列表中任一标签</td><td>任一状态触发行为</td></tr>
+        <tr><td><code class="en">Make Literal Gameplay Tag</code>（构造字面量标签）</td><td>把字符串字面量变成一个 <code class="en">GameplayTag</code>（注意标签需在 <code class="en">Project Settings</code> 中注册过）</td><td>动态比较标签</td></tr>
+        <tr><td><code class="en">Get Owned Gameplay Tags</code>（获取拥有标签）</td><td>读取 <code class="en">Actor</code> / <code class="en">AbilitySystem</code> 当前拥有的全部标签</td><td>显示 <code class="en">Buff</code> 列表、技能限制</td></tr>
+        <tr><td><code class="en">Add Gameplay Tag</code> / <code class="en">Remove Gameplay Tag</code>（添加 / 移除标签）</td><td>在 <code class="en">GameplayTagContainer</code> 上添加 / 移除单个标签</td><td>进入状态加标签、离开移除</td></tr>
+        <tr><td><code class="en">Get Tag Name</code>（获取标签名）</td><td>把 <code class="en">GameplayTag</code> 转成 <code class="en">Name</code> 字符串</td><td>日志打印、<code class="en">UI</code> 显示</td></tr>
+        <tr><td><code class="en">Is Gameplay Tag Valid</code>（标签是否有效）</td><td>判断标签字符串是否合法（已注册）</td><td>校验动态构造的标签</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><code class="en">Gameplay Tag</code> 与枚举的区别：标签支持「组合」（一个对象可同时拥有多个标签）且可运行时增删；枚举是单值。判断标签的字符串必须在 <code class="en">Project Settings</code> → <code class="en">Gameplay Tags</code> 里登记过。</p>
+
+    <h3 id="s81" class="hd lv3">18.14 样条线（<code class="en">Spline</code>，正文完全缺失）</h3>
+
+    <p>官方 <code class="en">Blueprint API</code> 有独立 <code class="en">Spline</code> 分类（<code class="en">Add Point</code> / <code class="en">Convert Spline</code> 等，官方确认）。样条线 = 一串控制点连成的曲线，广泛用于路径、管线、镜头运动。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Add Spline Point</code>（添加样条点）</td><td>在样条线末尾 / 指定索引添加控制点</td><td>运行时画路径、程序化铺管线</td></tr>
+        <tr><td><code class="en">Clear Spline Points</code>（清空样条点）</td><td>清空全部控制点</td><td>重置路径</td></tr>
+        <tr><td><code class="en">Get Number of Spline Points</code>（获取点数）</td><td>返回控制点数量</td><td>遍历路径点</td></tr>
+        <tr><td><code class="en">Get Location at Distance Along Spline</code>（按距离取位置）</td><td>沿样条走指定距离取世界坐标（含坐标系参数）</td><td>物体沿路径移动、列车沿轨道</td></tr>
+        <tr><td><code class="en">Get Distance Along Spline at Spline Point</code>（取点处累计距离）</td><td>返回某控制点处的累计弧长</td><td>分段路径规划</td></tr>
+        <tr><td><code class="en">Get Spline Length</code>（样条长度）</td><td>返回样条总长度</td><td>进度百分比 = 距离 / 总长</td></tr>
+        <tr><td><code class="en">Get Tangent at Distance</code>（取切线方向）</td><td>取某距离处的切线方向（朝向）</td><td>物体转向匹配路径方向</td></tr>
+        <tr><td><code class="en">Get Rotation at Distance</code>（取旋转）</td><td>取某距离处的旋转（朝向）</td><td>沿路物体对齐道路</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>搭配：<code class="en">Spline Mesh Component</code> 可沿样条铺网格体（管道 / 围栏）；<code class="en">Cine Camera Rig Rail</code>（摄像机轨道）也是基于样条的。</p>
+
+    <h3 id="s82" class="hd lv3">18.15 力反馈、作弊管理器、四元数与日期时间（正文缺失的零散分类）</h3>
+
+    <p>以下四组均来自官方 <code class="en">Blueprint API</code> 独立分类（<code class="en">ForceFeedback</code> / <code class="en">CheatManager</code> / <code class="en">Math</code> → <code class="en">Quat</code> / <code class="en">Math</code> → <code class="en">DateTime</code>），正文此前未覆盖；<code class="en">CSDN</code> 目录中也有「四元数」「日期时间」「作弊管理器」分类。</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>节点</th><th>作用</th><th>典型场景</th></tr></thead>
+        <tbody>
+        <tr><td><code class="en">Spawn Force Feedback at Location</code>（位置生成力反馈）</td><td>在世界坐标播放力反馈效果（手柄震动），可带衰减与 <code class="en">Tag</code></td><td>爆炸震动、受击震动</td></tr>
+        <tr><td><code class="en">Play</code> / <code class="en">Stop</code>（力反馈播放 / 停止）</td><td>播放 / 停止已挂载的力反馈效果</td><td>持续震动开 / 关</td></tr>
+        <tr><td><code class="en">Set Intensity Multiplier</code>（设强度倍率）</td><td>动态调整力反馈强度</td><td>血量越低震动越强</td></tr>
+        <tr><td><code class="en">Enable Debug Camera</code>（启用调试相机）</td><td>开启自由飞行调试相机（<code class="en">CheatManager</code>）</td><td>运行时查看关卡任意角度</td></tr>
+        <tr><td><code class="en">God</code> / <code class="en">Fly</code> / <code class="en">Ghost</code>（上帝 / 飞行 / 穿墙）</td><td>调试作弊命令：无敌 / 飞行 / 穿墙（<code class="en">CheatManager</code>）</td><td>测试便捷移动与无敌</td></tr>
+        <tr><td>（四元数）<code class="en">Make Rotator from Quat</code> / <code class="en">Quat to Rotator</code>（四元数 ↔ 旋转互转）</td><td>四元数与 <code class="en">Rotator</code> 互转；官方 <code class="en">Math</code> → <code class="en">Quat</code> 分类确认存在</td><td>旋转运算跨类型转换</td></tr>
+        <tr><td>（四元数）<code class="en">Quat Slerp</code>（球面插值）</td><td>两个四元数之间平滑插值（比 <code class="en">Lerp</code> 旋转更自然，避免万向锁）</td><td>平滑转向、相机旋转插值</td></tr>
+        <tr><td>（四元数）<code class="en">Get Forward</code> / <code class="en">Right</code> / <code class="en">Up Vector</code> (<code class="en">Quat</code>)（取四元数方向向量）</td><td>从四元数取前 / 右 / 上方向向量</td><td>朝向相关计算</td></tr>
+        <tr><td>（日期时间）<code class="en">Now</code>（当前时间）</td><td>取当前系统日期时间（<code class="en">DateTime</code> 类型）</td><td>记录时间戳、限时活动判断</td></tr>
+        <tr><td>（日期时间）<code class="en">Make Date Time</code> / <code class="en">Break Date Time</code>（构造 / 拆解日期时间）</td><td>按 年月日时分秒构造 / 拆解</td><td>解析活动起止时间</td></tr>
+        <tr><td>（日期时间）<code class="en">Date Time</code> + <code class="en">Timespan</code> / - <code class="en">Timespan</code>（日期加减）</td><td>日期时间加 / 减时间段</td><td>倒计时到某时刻</td></tr>
+        <tr><td>（日期时间）<code class="en">Timespan</code> 相关（<code class="en">From Seconds</code> / <code class="en">From Days</code> 等）</td><td>从秒 / 天等构造时间段</td><td>时长换算</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>四元数用途提示：骨骼 / 物理旋转运算更稳定，<code class="en">Slerp</code> 优于普通 <code class="en">Lerp</code>；日期时间多用于存档时间戳与活动倒计时。</p>
+
+    <h3 id="s83" class="hd lv3">18.16 第二批补漏小结</h3>
+
+    <p>本批共补入 6 大分类（<code class="en">Data Table</code> / <code class="en">Gameplay Tags</code> / <code class="en">Spline</code> / <code class="en">Force Feedback</code> / <code class="en">Cheat Manager</code> / 四元数 + 日期时间），全部经官方 <code class="en">Blueprint API</code> 5.7 目录逐项核实（官方分类页：<code class="en">DataTable</code>、<code class="en">GameplayTags</code>、<code class="en">Spline</code>、<code class="en">ForceFeedback</code>、<code class="en">CheatManager</code>、<code class="en">Math</code> → <code class="en">Quat</code>、<code class="en">Math</code> → <code class="en">DateTime</code>）。至此，社区检索（<code class="en">CSDN</code> / 知乎 / <code class="en">B</code> 站）中高频出现、正文缺失且官方可核实的节点均已收录；存疑项已在 18.11 标注。</p>
+  </main>
+</div>
+
+<footer>UE5 蓝图节点大全 · 中英对照参考手册 —— 由 Word 文档自动排版生成</footer>
+<button id="backtop" title="回到顶部">↑</button>
+
+<script>
+// 目录高亮(滚动监听)
+(function () {
+  var links = Array.prototype.slice.call(document.querySelectorAll('#toc a'));
+  var map = {};
+  links.forEach(function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  var secs = Array.prototype.slice.call(document.querySelectorAll('main .hd'))
+    .filter(function (el) { return map[el.id]; });
+  var cur = null;
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          if (cur) cur.classList.remove('active');
+          cur = map[e.target.id];
+          if (cur) cur.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-15% 0px -75% 0px' });
+    secs.forEach(function (el) { io.observe(el); });
+  }
+  links.forEach(function (a) {
+    a.addEventListener('click', function () {
+      if (cur) cur.classList.remove('active');
+      cur = a; a.classList.add('active');
+    });
+  });
+})();
+
+// 节点搜索(过滤表格行)
+(function () {
+  var q = document.getElementById('q');
+  var cnt = document.getElementById('qcount');
+  q.addEventListener('input', function () {
+    var k = q.value.trim().toLowerCase();
+    var shown = 0;
+    document.querySelectorAll('table').forEach(function (t) {
+      var any = false;
+      t.querySelectorAll('tbody tr').forEach(function (tr) {
+        var hit = !k || tr.textContent.toLowerCase().indexOf(k) !== -1;
+        tr.style.display = hit ? '' : 'none';
+        if (hit) { any = true; shown++; }
+      });
+      var wrap = t.closest('.table-wrap');
+      if (wrap) wrap.style.display = any ? '' : 'none';
+    });
+    cnt.textContent = k ? ('匹配 ' + shown + ' 行') : '';
+  });
+})();
+
+// 回到顶部
+(function () {
+  var btn = document.getElementById('backtop');
+  window.addEventListener('scroll', function () {
+    btn.classList.toggle('show', window.scrollY > 600);
+  }, { passive: true });
+  btn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+</script>
+</body>
+</html>
